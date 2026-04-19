@@ -1,1 +1,1667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KP Digital — Business Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:        #0c0c0c;
+  --bg2:       #141414;
+  --bg3:       #1c1c1c;
+  --bg4:       #242424;
+  --border:    #2a2a2a;
+  --border2:   #333;
+  --text:      #e8e4de;
+  --text2:     #9a9590;
+  --text3:     #5a5550;
+  --orange:    #f4631e;
+  --orange2:   #c94e12;
+  --orange-dim:#2a1508;
+  --green:     #22c55e;
+  --green-dim: #0a2010;
+  --red:       #ef4444;
+  --red-dim:   #200a0a;
+  --yellow:    #f59e0b;
+  --yellow-dim:#1f1500;
+  --blue:      #3b82f6;
+  --blue-dim:  #080f20;
+  --mono:      'DM Mono', monospace;
+  --sans:      'DM Sans', sans-serif;
+  --r:         6px;
+  --r2:        10px;
+  --sh:        0 1px 3px rgba(0,0,0,.4);
+  --sh2:       0 4px 20px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.5}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
 
+/* ── LAYOUT ── */
+.shell{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:220px;min-width:220px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+
+/* ── SIDEBAR ── */
+.sb-head{padding:22px 18px 16px;border-bottom:1px solid var(--border)}
+.sb-brand{font-size:17px;font-weight:700;letter-spacing:-.3px;color:var(--text)}
+.sb-brand b{color:var(--orange)}
+.sb-sub{font-size:10px;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:.8px;font-family:var(--mono)}
+.sb-nav{flex:1;overflow-y:auto;padding:10px 8px}
+.sb-section{font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);font-weight:600;padding:14px 10px 5px;font-family:var(--mono)}
+.sb-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);transition:all .15s;margin-bottom:1px;border:1px solid transparent}
+.sb-item:hover{color:var(--text);background:var(--bg3)}
+.sb-item.active{color:var(--orange);background:var(--orange-dim);border-color:rgba(244,99,30,.15)}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:background .15s}
+.sb-item.active .sb-dot{background:var(--orange)}
+.sb-item:hover .sb-dot{background:var(--text2)}
+.sb-foot{padding:12px 8px;border-top:1px solid var(--border)}
+.sb-goal{padding:10px 12px;background:var(--bg3);border-radius:var(--r);border:1px solid var(--border)}
+.sb-goal-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;font-family:var(--mono);margin-bottom:4px}
+.sb-goal-val{font-family:var(--mono);font-size:20px;font-weight:500;color:var(--orange)}
+.sb-goal-input{background:transparent;border:none;font-family:var(--mono);font-size:20px;font-weight:500;color:var(--orange);width:100%;outline:none}
+
+/* ── PAGE SHELL ── */
+.page{display:none;flex:1;padding:36px 40px;animation:fade .2s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.page-head{margin-bottom:32px}
+.page-title{font-size:26px;font-weight:700;letter-spacing:-.5px;color:var(--text);line-height:1.1}
+.page-title span{color:var(--orange)}
+.page-desc{font-size:14px;color:var(--text2);margin-top:6px}
+
+/* ── TYPOGRAPHY ── */
+h2{font-size:16px;font-weight:600;color:var(--text);letter-spacing:-.2px;margin-bottom:12px}
+h3{font-size:13px;font-weight:600;color:var(--text);text-transform:uppercase;letter-spacing:.6px;font-family:var(--mono);margin-bottom:10px}
+
+/* ── GRID ── */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.g4{grid-template-columns:repeat(4,1fr)}
+
+/* ── CARD ── */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:20px}
+.card-sm{padding:14px 16px}
+.card-flush{padding:0;overflow:hidden}
+
+/* ── KPI STRIP ── */
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:16px 20px}
+.kpi-label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);font-family:var(--mono);margin-bottom:6px}
+.kpi-val{font-family:var(--mono);font-size:28px;font-weight:500;color:var(--text);line-height:1}
+.kpi-val.orange{color:var(--orange)}
+.kpi-val.green{color:var(--green)}
+.kpi-val.red{color:var(--red)}
+.kpi-sub{font-size:12px;color:var(--text3);margin-top:5px}
+
+/* ── FORM ELEMENTS ── */
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+.field label{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);font-family:var(--mono);font-weight:500}
+input[type=text],input[type=number],select,textarea{
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);
+  padding:9px 12px;font-family:var(--sans);font-size:14px;color:var(--text);
+  width:100%;outline:none;transition:border-color .15s;
+  -moz-appearance:textfield;appearance:textfield
+}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--orange)}
+select option{background:var(--bg3)}
+textarea{resize:vertical;min-height:80px}
+.prefix-wrap{position:relative}
+.prefix-wrap .pre{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text3);font-family:var(--mono);font-size:14px;pointer-events:none}
+.prefix-wrap input{padding-left:24px}
+
+/* ── RANGE ── */
+input[type=range]{-webkit-appearance:none;appearance:none;background:var(--bg4);height:4px;border-radius:2px;width:100%;border:none;padding:0;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--orange);cursor:pointer}
+.range-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--text3);margin-top:4px}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--r);font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;border:1px solid transparent;letter-spacing:.1px}
+.btn-primary{background:var(--orange);color:#fff;border-color:var(--orange)}
+.btn-primary:hover{background:var(--orange2);border-color:var(--orange2)}
+.btn-ghost{background:transparent;color:var(--text2);border-color:var(--border)}
+.btn-ghost:hover{color:var(--text);border-color:var(--border2);background:var(--bg3)}
+.btn-danger{background:transparent;color:var(--red);border-color:var(--red-dim)}
+.btn-danger:hover{background:var(--red-dim)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-xs{padding:4px 9px;font-size:11px;border-radius:4px}
+.btn-green{background:transparent;color:var(--green);border-color:var(--green-dim)}
+.btn-green:hover{background:var(--green-dim)}
+
+/* ── BADGE ── */
+.badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;font-family:var(--mono);letter-spacing:.3px}
+.badge-green{background:var(--green-dim);color:var(--green)}
+.badge-red{background:var(--red-dim);color:var(--red)}
+.badge-yellow{background:var(--yellow-dim);color:var(--yellow)}
+.badge-orange{background:var(--orange-dim);color:var(--orange)}
+.badge-blue{background:var(--blue-dim);color:var(--blue)}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{padding:10px 14px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);font-family:var(--mono);font-weight:500;border-bottom:1px solid var(--border);white-space:nowrap}
+.tbl td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--bg3)}
+.tbl-num{font-family:var(--mono);color:var(--orange)}
+.tbl-muted{color:var(--text3)}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:20px}
+.tab{padding:10px 18px;font-size:13px;font-weight:500;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;margin-bottom:-1px}
+.tab:hover{color:var(--text2)}
+.tab.active{color:var(--orange);border-bottom-color:var(--orange)}
+
+/* ── BIZ CARDS ── */
+.biz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.biz-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:18px 16px;cursor:pointer;transition:all .18s}
+.biz-card:hover{border-color:var(--orange);background:var(--bg3)}
+.biz-card-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.biz-card-range{font-family:var(--mono);font-size:13px;color:var(--orange)}
+.biz-card-diff{font-size:12px;color:var(--text3);margin-top:6px}
+.biz-card-bar{height:3px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden}
+.biz-card-bar-fill{height:100%;border-radius:2px;background:var(--orange);transition:width .3s}
+
+/* ── SCENARIO BUILDER ── */
+.sc-pill-group{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.sc-pill{padding:6px 14px;border-radius:var(--r);border:1px solid var(--border);background:var(--bg3);font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .15s;font-family:var(--sans)}
+.sc-pill:hover{border-color:var(--border2);color:var(--text)}
+.sc-pill.on{border-color:var(--orange);background:var(--orange-dim);color:var(--orange)}
+
+/* ── RESULT PANEL ── */
+.result-panel{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r2);padding:22px}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.result-row:last-child{border-bottom:none}
+.result-label{font-size:13px;color:var(--text2)}
+.result-val{font-family:var(--mono);font-size:14px;color:var(--text);font-weight:500}
+.result-total{margin-top:14px;padding:16px;background:var(--orange-dim);border:1px solid rgba(244,99,30,.2);border-radius:var(--r);display:flex;justify-content:space-between;align-items:center}
+.result-total-label{font-size:13px;font-weight:600;color:var(--text)}
+.result-total-val{font-family:var(--mono);font-size:32px;font-weight:500;color:var(--orange)}
+
+/* ── STEP LIST ── */
+.step-list{list-style:none}
+.step-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.step-item:last-child{border-bottom:none}
+.step-num{width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-family:var(--mono)}
+.step-body strong{font-size:14px;font-weight:600;color:var(--text);display:block}
+.step-body span{font-size:13px;color:var(--text2);margin-top:2px;display:block}
+
+/* ── CHECKLIST ── */
+.check-list{list-style:none}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:14px}
+.check-item:last-child{border-bottom:none}
+.check-item input[type=checkbox]{width:15px;height:15px;accent-color:var(--orange);cursor:pointer;flex-shrink:0;margin-top:2px}
+.check-item label{cursor:pointer;color:var(--text)}
+.check-item input:checked+label{text-decoration:line-through;color:var(--text3)}
+
+/* ── SCRIPT BOX ── */
+.script-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:16px;font-size:14px;line-height:1.75;color:var(--text);position:relative;margin-bottom:12px}
+.script-box .copy-btn{position:absolute;top:10px;right:10px}
+
+/* ── COPY BTN ── */
+.copy-btn{padding:4px 10px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;transition:all .15s;font-family:var(--mono)}
+.copy-btn:hover{border-color:var(--orange);color:var(--orange)}
+.copy-btn.ok{border-color:var(--green);color:var(--green);background:var(--green-dim)}
+
+/* ── INFO / WARN ── */
+.info-bar{padding:11px 14px;border-radius:var(--r);font-size:13px;color:var(--text2);border-left:3px solid;margin-bottom:12px}
+.info-bar.orange{background:var(--orange-dim);border-color:var(--orange)}
+.info-bar.red{background:var(--red-dim);border-color:var(--red);color:var(--red)}
+.info-bar.green{background:var(--green-dim);border-color:var(--green);color:var(--green)}
+.info-bar.yellow{background:var(--yellow-dim);border-color:var(--yellow);color:var(--yellow)}
+.info-bar strong{color:var(--text)}
+
+/* ── INVOICE ── */
+.invoice-preview{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:30px;font-size:14px}
+.inv-head{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.inv-brand{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.inv-brand b{color:var(--orange)}
+.inv-meta{text-align:right;font-size:13px;color:var(--text2);line-height:1.9}
+.inv-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)}
+.inv-row:last-child{border-bottom:none}
+.inv-total-row{margin-top:14px;padding:14px 16px;background:var(--orange-dim);border:1px solid rgba(244,99,30,.2);border-radius:var(--r);display:flex;justify-content:space-between;font-family:var(--mono);font-weight:500;font-size:17px}
+.inv-total-row span:last-child{color:var(--orange)}
+
+/* ── CHART ── */
+.chart-wrap{height:180px;display:flex;align-items:flex-end;gap:4px;padding-top:20px;position:relative}
+.chart-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.chart-bar-wrap{width:100%;flex:1;display:flex;align-items:flex-end}
+.chart-bar{width:100%;border-radius:3px 3px 0 0;background:var(--orange);opacity:.7;transition:height .4s ease,opacity .2s;min-height:2px;cursor:pointer}
+.chart-bar:hover{opacity:1}
+.chart-bar.highlight{opacity:1;background:var(--orange)}
+.chart-label{font-size:10px;color:var(--text3);font-family:var(--mono);text-align:center}
+.chart-val{font-size:10px;color:var(--text3);font-family:var(--mono);text-align:center}
+
+/* ── HEALTH SCORE ── */
+.health-ring{position:relative;width:120px;height:120px;margin:0 auto 16px}
+.health-svg{transform:rotate(-90deg)}
+.health-num{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--mono);font-size:28px;font-weight:500;color:var(--text)}
+
+/* ── TIMELINE ── */
+.tl{position:relative;padding-left:22px}
+.tl::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:1px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:18px}
+.tl-item::before{content:'';position:absolute;left:-18px;top:5px;width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 0 2px var(--bg2),0 0 0 3px var(--orange)}
+.tl-day{font-family:var(--mono);font-size:11px;color:var(--orange);margin-bottom:2px;text-transform:uppercase;letter-spacing:.4px}
+.tl-title{font-size:14px;font-weight:600;color:var(--text)}
+.tl-desc{font-size:13px;color:var(--text2);margin-top:2px}
+
+/* ── SAVED QUOTES ── */
+.saved-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.saved-card-info{font-size:13px;color:var(--text)}
+.saved-card-price{font-family:var(--mono);font-size:18px;color:var(--orange)}
+
+/* ── HEALTH ITEMS ── */
+.health-item{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.health-item:last-child{border-bottom:none}
+
+/* ── REDFLAG ── */
+.flag-item{padding:11px 14px;border-radius:var(--r);background:var(--red-dim);border:1px solid rgba(239,68,68,.15);margin-bottom:8px;font-size:13px;color:var(--text2)}
+.flag-item strong{color:var(--red);display:block;margin-bottom:2px;font-size:13px}
+
+/* ── SECTION SPACER ── */
+.section{margin-bottom:28px}
+
+/* ── DIVIDER ── */
+.divider{border:none;border-top:1px solid var(--border);margin:20px 0}
+
+/* SCROLLABLE AREA within page */
+.scroll-area{overflow-y:auto}
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- ══ SIDEBAR ══ -->
+<nav class="sidebar">
+  <div class="sb-head">
+    <div class="sb-brand">KP <b>Digital</b></div>
+    <div class="sb-sub">Business Command Center</div>
+  </div>
+
+  <div class="sb-nav">
+    <div class="sb-section">Overview</div>
+    <div class="sb-item active" onclick="nav('dashboard')"><span class="sb-dot"></span>Dashboard</div>
+    <div class="sb-item" onclick="nav('businesses')"><span class="sb-dot"></span>Business Types</div>
+
+    <div class="sb-section">Calculators</div>
+    <div class="sb-item" onclick="nav('pricing')"><span class="sb-dot"></span>Pricing Calculator</div>
+    <div class="sb-item" onclick="nav('scenario')"><span class="sb-dot"></span>Scenario Builder</div>
+    <div class="sb-item" onclick="nav('roi')"><span class="sb-dot"></span>ROI Calculator</div>
+    <div class="sb-item" onclick="nav('income')"><span class="sb-dot"></span>Income Engine</div>
+    <div class="sb-item" onclick="nav('profit')"><span class="sb-dot"></span>Profit Tracker</div>
+
+    <div class="sb-section">Client Tools</div>
+    <div class="sb-item" onclick="nav('invoice')"><span class="sb-dot"></span>Invoice Generator</div>
+    <div class="sb-item" onclick="nav('proposal')"><span class="sb-dot"></span>Proposal Generator</div>
+    <div class="sb-item" onclick="nav('scope')"><span class="sb-dot"></span>Scope Creep Tracker</div>
+    <div class="sb-item" onclick="nav('savedquotes')"><span class="sb-dot"></span>Saved Quotes</div>
+
+    <div class="sb-section">Reference</div>
+    <div class="sb-item" onclick="nav('workflow')"><span class="sb-dot"></span>Workflow Guide</div>
+    <div class="sb-item" onclick="nav('scripts')"><span class="sb-dot"></span>Sales Scripts</div>
+    <div class="sb-item" onclick="nav('onboarding')"><span class="sb-dot"></span>Onboarding</div>
+    <div class="sb-item" onclick="nav('tools')"><span class="sb-dot"></span>All Tools</div>
+  </div>
+
+  <div class="sb-foot">
+    <div class="sb-goal">
+      <div class="sb-goal-label">Monthly Goal</div>
+      <div style="display:flex;align-items:center;gap:2px">
+        <span style="color:var(--text3);font-family:var(--mono);font-size:20px">$</span>
+        <input class="sb-goal-input" type="number" id="goal-input" value="3000" oninput="updateGoal()"/>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ MAIN ══ -->
+<div class="main">
+
+<!-- ════ DASHBOARD ════ -->
+<div id="page-dashboard" class="page active">
+  <div class="page-head">
+    <div class="page-title">Business <span>Dashboard</span></div>
+    <div class="page-desc">Your freelance command center — everything calculated, nothing guessed.</div>
+  </div>
+
+  <div class="section grid g4">
+    <div class="kpi"><div class="kpi-label">Starter Rate</div><div class="kpi-val orange">$300</div><div class="kpi-sub">3–5 page site</div></div>
+    <div class="kpi"><div class="kpi-label">Standard Rate</div><div class="kpi-val orange">$600</div><div class="kpi-sub">5–8 page + form</div></div>
+    <div class="kpi"><div class="kpi-label">Premium Rate</div><div class="kpi-val orange">$1,000</div><div class="kpi-sub">Full custom build</div></div>
+    <div class="kpi"><div class="kpi-label">Retainer / mo</div><div class="kpi-val orange">$150</div><div class="kpi-sub">Updates + support</div></div>
+  </div>
+
+  <div class="section grid g2">
+    <div class="card">
+      <h2>Goal Progress</h2>
+      <div class="grid g2" style="gap:10px;margin-bottom:16px">
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px">
+          <div style="font-size:11px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px">Projects Needed</div>
+          <div id="dash-projects-needed" style="font-family:var(--mono);font-size:22px;color:var(--orange)">2</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:3px">Standard packages</div>
+        </div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px">
+          <div style="font-size:11px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px">Retainers Needed</div>
+          <div id="dash-retainers-needed" style="font-family:var(--mono);font-size:22px;color:var(--orange)">20</div>
+          <div style="font-size:12px;color:var(--text3);margin-top:3px">at $150/mo</div>
+        </div>
+      </div>
+      <div class="info-bar orange">Set your <strong>Monthly Goal</strong> in the sidebar — every calculator adjusts automatically.</div>
+    </div>
+    <div class="card">
+      <h2>12-Month Projection</h2>
+      <div class="chart-wrap" id="dash-chart"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Business Types — Click to Open</h2>
+    <div class="biz-grid" id="dash-biz-grid"></div>
+  </div>
+</div>
+
+<!-- ════ BUSINESSES ════ -->
+<div id="page-businesses" class="page">
+  <div class="page-head">
+    <div class="page-title">Business <span>Types</span></div>
+    <div class="page-desc">Every niche you target — tools, pricing, pitch, and what to watch out for.</div>
+  </div>
+  <div class="biz-grid" id="main-biz-grid"></div>
+</div>
+
+<!-- ════ BIZ DETAIL ════ -->
+<div id="page-biz-detail" class="page">
+  <button class="btn btn-ghost btn-sm" onclick="nav('businesses')" style="margin-bottom:20px">← Back</button>
+  <div id="biz-detail-body"></div>
+</div>
+
+<!-- ════ PRICING CALCULATOR ════ -->
+<div id="page-pricing" class="page">
+  <div class="page-head">
+    <div class="page-title">Pricing <span>Calculator</span></div>
+    <div class="page-desc">Configure a project — your quote, hours, and effective rate update live.</div>
+  </div>
+
+  <div class="grid g2" style="align-items:start">
+    <div class="card">
+      <div class="field">
+        <label>Base Package</label>
+        <select id="pc-pkg" onchange="calcPricing()">
+          <option value="300">Starter — $300 (3–5 pages)</option>
+          <option value="600">Standard — $600 (5–8 pages + forms)</option>
+          <option value="1000">Premium — $1,000 (full custom)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Experience Level</label>
+        <select id="pc-exp" onchange="calcPricing()">
+          <option value="1.0">Beginner (year 1)</option>
+          <option value="1.15" selected>Intermediate (1–2 yrs)</option>
+          <option value="1.3">Advanced (2–4 yrs)</option>
+          <option value="1.5">Expert (4+ yrs)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Client Type</label>
+        <select id="pc-client" onchange="calcPricing()">
+          <option value="0.85">Tight Budget (small sole trader)</option>
+          <option value="1.0" selected>Standard (local business)</option>
+          <option value="1.2">Premium (established business)</option>
+          <option value="1.4">High-End (multi-location)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Timeline</label>
+        <select id="pc-time" onchange="calcPricing()">
+          <option value="1.0">Standard — 1–2 weeks</option>
+          <option value="1.3">Rush — under 1 week (+30%)</option>
+          <option value="1.5">Same Week — 3–4 days (+50%)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Add-Ons</label>
+        <div id="pc-addons" style="display:flex;flex-direction:column;gap:7px">
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:var(--sans);text-transform:none;letter-spacing:0;color:var(--text2);cursor:pointer"><input type="checkbox" value="75" onchange="calcPricing()"> Online Booking (+$75)</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:var(--sans);text-transform:none;letter-spacing:0;color:var(--text2);cursor:pointer"><input type="checkbox" value="100" onchange="calcPricing()"> E-commerce Store (+$100)</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:var(--sans);text-transform:none;letter-spacing:0;color:var(--text2);cursor:pointer"><input type="checkbox" value="50" onchange="calcPricing()"> Google Maps (+$50)</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:var(--sans);text-transform:none;letter-spacing:0;color:var(--text2);cursor:pointer"><input type="checkbox" value="50" onchange="calcPricing()"> Photo Gallery (+$50)</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:var(--sans);text-transform:none;letter-spacing:0;color:var(--text2);cursor:pointer"><input type="checkbox" value="80" onchange="calcPricing()"> Blog Section (+$80)</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:var(--sans);text-transform:none;letter-spacing:0;color:var(--text2);cursor:pointer"><input type="checkbox" value="120" onchange="calcPricing()"> Live Chat (+$120)</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:var(--sans);text-transform:none;letter-spacing:0;color:var(--text2);cursor:pointer"><input type="checkbox" value="150" onchange="calcPricing()"> SEO Setup (+$150)</label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;font-family:var(--sans);text-transform:none;letter-spacing:0;color:var(--text2);cursor:pointer"><input type="checkbox" value="200" onchange="calcPricing()"> Logo Design (+$200)</label>
+        </div>
+      </div>
+      <div class="field" style="margin-top:10px">
+        <label>Tax / Safety Buffer</label>
+        <input type="range" id="pc-tax" min="0" max="40" value="25" oninput="calcPricing()"/>
+        <div class="range-row"><span>0%</span><span id="pc-tax-val" style="color:var(--text2)">25%</span><span>40%</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="result-panel" style="margin-bottom:14px">
+        <div class="result-row"><span class="result-label">Base package</span><span class="result-val" id="pc-r-base">$300</span></div>
+        <div class="result-row"><span class="result-label">Experience multiplier</span><span class="result-val" id="pc-r-exp">×1.15</span></div>
+        <div class="result-row"><span class="result-label">Client type multiplier</span><span class="result-val" id="pc-r-client">×1.0</span></div>
+        <div class="result-row"><span class="result-label">Add-ons</span><span class="result-val" id="pc-r-addons">+$0</span></div>
+        <div class="result-row"><span class="result-label">Rush fee</span><span class="result-val" id="pc-r-rush">None</span></div>
+        <div class="result-row"><span class="result-label">Tax buffer (set aside)</span><span class="result-val" id="pc-r-tax">$86</span></div>
+        <div class="result-total">
+          <span class="result-total-label">Quote to Client</span>
+          <span class="result-total-val" id="pc-total">$345</span>
+        </div>
+      </div>
+      <div class="grid g2" style="gap:10px;margin-bottom:14px">
+        <div class="kpi card-sm"><div class="kpi-label">Est. Hours</div><div class="kpi-val" id="pc-hours" style="font-size:22px">6–9</div></div>
+        <div class="kpi card-sm"><div class="kpi-label">Eff. Hourly Rate</div><div class="kpi-val green" id="pc-rate" style="font-size:22px">$38/hr</div></div>
+      </div>
+      <div class="kpi card-sm" style="margin-bottom:14px"><div class="kpi-label">Projects at this rate to hit goal</div><div class="kpi-val" id="pc-to-goal" style="font-size:22px;color:var(--text)">9</div></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" onclick="saveQuoteFromCalc()">Save Quote</button>
+        <button class="btn btn-ghost" onclick="copyPricingQuote()">Copy Quote</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:28px">
+    <h2>Feature Time & Price Reference</h2>
+    <div class="card card-flush">
+      <table class="tbl">
+        <thead><tr><th>Feature</th><th>Time</th><th>Difficulty</th><th>Add-On Price</th></tr></thead>
+        <tbody>
+          <tr><td>5-page site (base)</td><td class="tbl-num">4–8 hrs</td><td><span class="badge badge-green">Easy</span></td><td class="tbl-num">$300 base</td></tr>
+          <tr><td>Contact form</td><td class="tbl-num">1–2 hrs</td><td><span class="badge badge-green">Easy</span></td><td class="tbl-muted">Included</td></tr>
+          <tr><td>Online booking (Calendly)</td><td class="tbl-num">2–4 hrs</td><td><span class="badge badge-yellow">Medium</span></td><td class="tbl-num">+$75</td></tr>
+          <tr><td>Photo gallery</td><td class="tbl-num">1–2 hrs</td><td><span class="badge badge-green">Easy</span></td><td class="tbl-num">+$50</td></tr>
+          <tr><td>Google Maps embed</td><td class="tbl-num">30 min</td><td><span class="badge badge-green">Easy</span></td><td class="tbl-num">+$50</td></tr>
+          <tr><td>Blog section</td><td class="tbl-num">2–3 hrs</td><td><span class="badge badge-yellow">Medium</span></td><td class="tbl-num">+$80</td></tr>
+          <tr><td>E-commerce (Ecwid)</td><td class="tbl-num">6–12 hrs</td><td><span class="badge badge-red">Complex</span></td><td class="tbl-num">+$100–300</td></tr>
+          <tr><td>SEO setup</td><td class="tbl-num">3–5 hrs</td><td><span class="badge badge-yellow">Medium</span></td><td class="tbl-num">+$150</td></tr>
+          <tr><td>Logo (Canva)</td><td class="tbl-num">1–3 hrs</td><td><span class="badge badge-green">Easy</span></td><td class="tbl-num">+$200</td></tr>
+          <tr><td>Live chat (Tawk.to)</td><td class="tbl-num">30 min</td><td><span class="badge badge-green">Easy</span></td><td class="tbl-num">+$120</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ════ SCENARIO BUILDER ════ -->
+<div id="page-scenario" class="page">
+  <div class="page-head">
+    <div class="page-title">Scenario <span>Builder</span></div>
+    <div class="page-desc">Build any client scenario — full price breakdown, negotiation range, and copyable quote.</div>
+  </div>
+  <div class="grid g2" style="align-items:start">
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <h3 style="margin-bottom:10px">Business Type</h3>
+        <div class="sc-pill-group" id="sc-biz">
+          <button class="sc-pill" onclick="scPick('biz',this,'HVAC',0)">HVAC</button>
+          <button class="sc-pill" onclick="scPick('biz',this,'Hair Salon',0)">Hair Salon</button>
+          <button class="sc-pill" onclick="scPick('biz',this,'Barber',50)">Barber</button>
+          <button class="sc-pill" onclick="scPick('biz',this,'Cleaning',0)">Cleaning</button>
+          <button class="sc-pill" onclick="scPick('biz',this,'Mechanic',0)">Mechanic</button>
+          <button class="sc-pill" onclick="scPick('biz',this,'Restaurant',100)">Restaurant</button>
+          <button class="sc-pill" onclick="scPick('biz',this,'Nail Salon',0)">Nail Salon</button>
+          <button class="sc-pill" onclick="scPick('biz',this,'Landscaping',0)">Landscaping</button>
+          <button class="sc-pill" onclick="scPick('biz',this,'Personal Trainer',0)">Trainer</button>
+        </div>
+
+        <h3 style="margin:14px 0 10px">Package</h3>
+        <div class="sc-pill-group" id="sc-pkg">
+          <button class="sc-pill" onclick="scPick('pkg',this,'Starter',300)">Starter $300</button>
+          <button class="sc-pill" onclick="scPick('pkg',this,'Standard',600)">Standard $600</button>
+          <button class="sc-pill" onclick="scPick('pkg',this,'Premium',1000)">Premium $1,000</button>
+        </div>
+
+        <h3 style="margin:14px 0 10px">Add-Ons</h3>
+        <div class="sc-pill-group">
+          <button class="sc-pill" onclick="scToggle(this,'Booking',75)">Booking +$75</button>
+          <button class="sc-pill" onclick="scToggle(this,'E-Commerce',100)">E-Commerce +$100</button>
+          <button class="sc-pill" onclick="scToggle(this,'Gallery',50)">Gallery +$50</button>
+          <button class="sc-pill" onclick="scToggle(this,'SEO',150)">SEO +$150</button>
+          <button class="sc-pill" onclick="scToggle(this,'Logo',200)">Logo +$200</button>
+          <button class="sc-pill" onclick="scToggle(this,'Blog',80)">Blog +$80</button>
+          <button class="sc-pill" onclick="scToggle(this,'Live Chat',120)">Live Chat +$120</button>
+        </div>
+
+        <h3 style="margin:14px 0 10px">Client Type</h3>
+        <div class="sc-pill-group" id="sc-cli">
+          <button class="sc-pill" onclick="scPick('cli',this,'Tight Budget',0.85)">Tight Budget</button>
+          <button class="sc-pill on" onclick="scPick('cli',this,'Standard',1.0)">Standard</button>
+          <button class="sc-pill" onclick="scPick('cli',this,'Premium',1.2)">Premium</button>
+          <button class="sc-pill" onclick="scPick('cli',this,'High-End',1.4)">High-End</button>
+        </div>
+
+        <h3 style="margin:14px 0 10px">Timeline</h3>
+        <div class="sc-pill-group" id="sc-time">
+          <button class="sc-pill on" onclick="scPickTime(this,'Standard',1.0)">Standard</button>
+          <button class="sc-pill" onclick="scPickTime(this,'Rush +30%',1.3)">Rush +30%</button>
+          <button class="sc-pill" onclick="scPickTime(this,'Same Week +50%',1.5)">Same Week +50%</button>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:16px">
+          <button class="btn btn-primary" onclick="buildScenario()">Calculate</button>
+          <button class="btn btn-ghost" onclick="resetScenario()">Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div id="sc-result" class="result-panel" style="margin-bottom:14px">
+        <div style="text-align:center;padding:30px 0;color:var(--text3);font-size:13px">Select options and click Calculate</div>
+      </div>
+      <div class="info-bar yellow"><strong>Scope Creep Rate:</strong> Any work outside agreed scope bills at $75/hr. Always confirm changes in writing first.</div>
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:24px">
+    <h2>Quick Reference Scenarios</h2>
+    <div class="card card-flush">
+      <table class="tbl">
+        <thead><tr><th>Scenario</th><th>Package</th><th>Extras</th><th>Quote</th><th>Hours</th><th>Complexity</th></tr></thead>
+        <tbody>
+          <tr><td>Local HVAC — starter</td><td>Starter</td><td>Maps, form</td><td class="tbl-num">$350</td><td class="tbl-num">5–7 hrs</td><td><span class="badge badge-green">Easy</span></td></tr>
+          <tr><td>Hair Salon — standard + booking</td><td>Standard</td><td>Booking, gallery</td><td class="tbl-num">$725</td><td class="tbl-num">10–14 hrs</td><td><span class="badge badge-yellow">Medium</span></td></tr>
+          <tr><td>Restaurant — premium full</td><td>Premium</td><td>SEO, store, logo</td><td class="tbl-num">$1,450</td><td class="tbl-num">20–26 hrs</td><td><span class="badge badge-red">Complex</span></td></tr>
+          <tr><td>Barber — standard + booking</td><td>Standard</td><td>Booking, gallery</td><td class="tbl-num">$725</td><td class="tbl-num">9–12 hrs</td><td><span class="badge badge-yellow">Medium</span></td></tr>
+          <tr><td>Cleaner — starter leads</td><td>Starter</td><td>Form, maps</td><td class="tbl-num">$350</td><td class="tbl-num">4–6 hrs</td><td><span class="badge badge-green">Easy</span></td></tr>
+          <tr><td>Personal Trainer — premium</td><td>Premium</td><td>Booking, blog</td><td class="tbl-num">$1,080</td><td class="tbl-num">16–20 hrs</td><td><span class="badge badge-yellow">Medium</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ════ ROI CALCULATOR ════ -->
+<div id="page-roi" class="page">
+  <div class="page-head">
+    <div class="page-title">ROI <span>Calculator</span></div>
+    <div class="page-desc">Show clients exactly what a website is worth. Use this on calls to justify your rate.</div>
+  </div>
+  <div class="grid g2" style="align-items:start">
+    <div class="card">
+      <h2>Client's Numbers</h2>
+      <div class="field"><label>Average value per new customer ($)</label><div class="prefix-wrap"><span class="pre">$</span><input type="number" id="roi-val" value="200" oninput="calcROI()"></div></div>
+      <div class="field"><label>Estimated new customers/month from site</label><input type="number" id="roi-cust" value="3" oninput="calcROI()"></div>
+      <div class="field"><label>Website cost ($)</label><div class="prefix-wrap"><span class="pre">$</span><input type="number" id="roi-cost" value="600" oninput="calcROI()"></div></div>
+      <div class="field"><label>Monthly retainer (optional) ($)</label><div class="prefix-wrap"><span class="pre">$</span><input type="number" id="roi-ret" value="0" oninput="calcROI()"></div></div>
+    </div>
+    <div>
+      <div class="grid g2" style="gap:10px;margin-bottom:14px">
+        <div class="kpi"><div class="kpi-label">Monthly Revenue</div><div class="kpi-val green" id="roi-monthly">$600</div></div>
+        <div class="kpi"><div class="kpi-label">Payback Period</div><div class="kpi-val" id="roi-payback">1 month</div></div>
+        <div class="kpi"><div class="kpi-label">12-Month Return</div><div class="kpi-val green" id="roi-annual">$6,600</div></div>
+        <div class="kpi"><div class="kpi-label">Year 2 Net (free)</div><div class="kpi-val green" id="roi-yr2">$7,200</div></div>
+      </div>
+      <div class="info-bar green" id="roi-verdict">At 3 customers/mo — site pays back in 1 month.</div>
+    </div>
+  </div>
+  <div class="section" style="margin-top:20px">
+    <h2>Ready-to-Use Pitch Script</h2>
+    <div class="script-box">
+      <button class="copy-btn" onclick="copyEl(this,'roi-pitch')">Copy</button>
+      <div id="roi-pitch"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ INCOME ENGINE ════ -->
+<div id="page-income" class="page">
+  <div class="page-head">
+    <div class="page-title">Income <span>Engine</span></div>
+    <div class="page-desc">Reverse-engineer your monthly goal. Know exactly what you need to hit it.</div>
+  </div>
+  <div class="grid g2" style="align-items:start">
+    <div class="card">
+      <div class="field"><label>Monthly Income Goal ($)</label><div class="prefix-wrap"><span class="pre">$</span><input type="number" id="ie-goal" value="3000" oninput="calcIncome()"></div></div>
+      <div class="field"><label>Monthly Business Expenses ($)</label><div class="prefix-wrap"><span class="pre">$</span><input type="number" id="ie-exp" value="20" oninput="calcIncome()"></div></div>
+      <div class="field"><label>Billable Hours / Week</label><input type="range" id="ie-hrs" min="5" max="40" value="20" oninput="calcIncome()"/><div class="range-row"><span>5</span><span id="ie-hrs-val">20 hrs</span><span>40</span></div></div>
+      <div class="field"><label>Tax Buffer %</label><input type="range" id="ie-tax" min="0" max="40" value="25" oninput="calcIncome()"/><div class="range-row"><span>0%</span><span id="ie-tax-val">25%</span><span>40%</span></div></div>
+      <div class="field"><label>Experience Level</label>
+        <select id="ie-exp-lvl" onchange="calcIncome()">
+          <option value="1.0">Beginner</option>
+          <option value="1.15" selected>Intermediate</option>
+          <option value="1.3">Advanced</option>
+          <option value="1.5">Expert</option>
+        </select>
+      </div>
+      <div class="field"><label>Current Day Job Salary / yr ($) — optional</label><div class="prefix-wrap"><span class="pre">$</span><input type="number" id="ie-job" value="0" oninput="calcIncome()"></div></div>
+    </div>
+    <div>
+      <div class="grid g2" style="gap:10px;margin-bottom:14px">
+        <div class="kpi"><div class="kpi-label">Target Hourly Rate</div><div class="kpi-val orange" id="ie-rate">$31/hr</div></div>
+        <div class="kpi"><div class="kpi-label">Projects/mo (Standard)</div><div class="kpi-val" id="ie-projects">5</div></div>
+        <div class="kpi"><div class="kpi-label">Retainers to Replace Job</div><div class="kpi-val" id="ie-ret-job">—</div></div>
+        <div class="kpi"><div class="kpi-label">Months to Replace Job</div><div class="kpi-val" id="ie-months-job">—</div></div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <h2>Packages Needed to Hit Goal</h2>
+        <table class="tbl">
+          <thead><tr><th>Package</th><th>Rate</th><th>Qty Needed</th><th>Hours</th></tr></thead>
+          <tbody id="ie-pkg-table"></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <h2>Freelance Health Score</h2>
+        <div style="display:flex;align-items:center;gap:20px">
+          <div class="health-ring">
+            <svg class="health-svg" width="120" height="120" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border)" stroke-width="10"/>
+              <circle cx="60" cy="60" r="50" fill="none" stroke="var(--orange)" stroke-width="10"
+                stroke-dasharray="314" id="health-arc" stroke-dashoffset="200" stroke-linecap="round"/>
+            </svg>
+            <div class="health-num" id="health-num">36</div>
+          </div>
+          <div style="flex:1">
+            <div id="health-verdict" style="font-size:13px;color:var(--text2);line-height:1.6"></div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div id="health-items"></div>
+      </div>
+    </div>
+  </div>
+  <div class="section" style="margin-top:20px">
+    <h2>12-Month Income Projection</h2>
+    <div class="card">
+      <div class="chart-wrap" id="income-chart" style="height:200px"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ PROFIT TRACKER ════ -->
+<div id="page-profit" class="page">
+  <div class="page-head">
+    <div class="page-title">Profit <span>Tracker</span></div>
+    <div class="page-desc">Your real take-home after costs and tax. Know if this month is actually profitable.</div>
+  </div>
+  <div class="grid g2" style="align-items:start">
+    <div class="card">
+      <h2>This Month</h2>
+      <div class="field"><label>Projects completed</label><input type="number" id="pt-qty" value="2" oninput="calcProfit()"></div>
+      <div class="field"><label>Average project price ($)</label><div class="prefix-wrap"><span class="pre">$</span><input type="number" id="pt-avg" value="500" oninput="calcProfit()"></div></div>
+      <div class="field"><label>Retainer income ($)</label><div class="prefix-wrap"><span class="pre">$</span><input type="number" id="pt-ret" value="0" oninput="calcProfit()"></div></div>
+      <div class="field"><label>Tool costs ($)</label><div class="prefix-wrap"><span class="pre">$</span><input type="number" id="pt-costs" value="5" oninput="calcProfit()"></div></div>
+      <div class="field"><label>Hours worked (total)</label><input type="number" id="pt-hrs" value="16" oninput="calcProfit()"></div>
+      <div class="field"><label>Tax rate %</label><input type="range" id="pt-tax" min="0" max="40" value="25" oninput="calcProfit()"/><div class="range-row"><span>0%</span><span id="pt-tax-val">25%</span><span>40%</span></div></div>
+    </div>
+    <div>
+      <div class="grid g2" style="gap:10px;margin-bottom:14px">
+        <div class="kpi"><div class="kpi-label">Gross Revenue</div><div class="kpi-val orange" id="pt-gross">$1,000</div></div>
+        <div class="kpi"><div class="kpi-label">Tax Set Aside</div><div class="kpi-val red" id="pt-tax-amt">$249</div></div>
+        <div class="kpi"><div class="kpi-label">Net Profit</div><div class="kpi-val green" id="pt-net">$746</div></div>
+        <div class="kpi"><div class="kpi-label">Hourly Rate</div><div class="kpi-val" id="pt-hourly">$47/hr</div></div>
+      </div>
+      <div class="card">
+        <h2>Tool Overhead (Reality Check)</h2>
+        <table class="tbl">
+          <thead><tr><th>Tool</th><th>Cost/mo</th></tr></thead>
+          <tbody>
+            <tr><td>Webflow (free tier)</td><td class="tbl-num">$0</td></tr>
+            <tr><td>GitHub Pages</td><td class="tbl-num">$0</td></tr>
+            <tr><td>Canva (free)</td><td class="tbl-num">$0</td></tr>
+            <tr><td>Claude / ChatGPT (free)</td><td class="tbl-num">$0</td></tr>
+            <tr><td>Formspree (free tier)</td><td class="tbl-num">$0</td></tr>
+            <tr><td>Domain (~$12/yr)</td><td class="tbl-num">~$1</td></tr>
+            <tr><td style="font-weight:600">Total overhead</td><td class="tbl-num" style="color:var(--green)">~$1–5/mo</td></tr>
+          </tbody>
+        </table>
+        <div class="info-bar green" style="margin-top:12px;margin-bottom:0">Overhead is near zero. Almost every dollar billed is profit.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ INVOICE ════ -->
+<div id="page-invoice" class="page">
+  <div class="page-head">
+    <div class="page-title">Invoice <span>Generator</span></div>
+    <div class="page-desc">Fill in the details — the invoice preview updates live. Print or screenshot to send.</div>
+  </div>
+  <div class="grid g2" style="align-items:start;margin-bottom:24px">
+    <div class="card">
+      <h2>Client Details</h2>
+      <div class="field"><label>Client Name / Business</label><input type="text" id="inv-client" placeholder="Mike's HVAC Services" oninput="buildInvoice()"></div>
+      <div class="field"><label>Client Email</label><input type="text" id="inv-email" placeholder="client@email.com" oninput="buildInvoice()"></div>
+      <div class="field"><label>Invoice Date</label><input type="text" id="inv-date" oninput="buildInvoice()"></div>
+      <div class="field"><label>Due Date</label><input type="text" id="inv-due" oninput="buildInvoice()"></div>
+      <div class="field"><label>Invoice Number</label><input type="text" id="inv-num" placeholder="INV-001" oninput="buildInvoice()"></div>
+      <div class="field"><label>Notes (optional)</label><textarea id="inv-notes" placeholder="Payment via Venmo / Cash App / Zelle. 50% paid upfront." oninput="buildInvoice()"></textarea></div>
+    </div>
+    <div class="card">
+      <h2>Line Items</h2>
+      <div id="inv-items">
+        <div style="display:grid;grid-template-columns:1fr 90px;gap:8px;margin-bottom:10px;align-items:end">
+          <div><label style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);font-family:var(--mono);display:block;margin-bottom:4px">Description</label><input type="text" class="inv-desc" placeholder="Starter Website Package" oninput="buildInvoice()"></div>
+          <div><label style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);font-family:var(--mono);display:block;margin-bottom:4px">$ Amount</label><input type="number" class="inv-amt" placeholder="300" oninput="buildInvoice()"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 90px;gap:8px;margin-bottom:10px;align-items:end">
+          <div><input type="text" class="inv-desc" placeholder="Booking Integration" oninput="buildInvoice()"></div>
+          <div><input type="number" class="inv-amt" placeholder="75" oninput="buildInvoice()"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 90px;gap:8px;margin-bottom:10px;align-items:end">
+          <div><input type="text" class="inv-desc" placeholder="Optional add-on" oninput="buildInvoice()"></div>
+          <div><input type="number" class="inv-amt" placeholder="0" oninput="buildInvoice()"></div>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-sm" onclick="addInvLine()" style="margin-top:4px">+ Add line</button>
+    </div>
+  </div>
+
+  <div class="invoice-preview" id="live-invoice">
+    <div class="inv-head">
+      <div><div class="inv-brand">KP <b>Digital</b></div><div style="font-size:13px;color:var(--text3);margin-top:4px">kpdigital@email.com</div></div>
+      <div class="inv-meta">
+        <div>Invoice <span id="inv-d-num" style="color:var(--orange)">INV-001</span></div>
+        <div>Billed to: <span id="inv-d-client" style="color:var(--text)">—</span></div>
+        <div>Date: <span id="inv-d-date">—</span></div>
+        <div>Due: <span id="inv-d-due">—</span></div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr auto;font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;font-family:var(--mono);padding-bottom:8px;border-bottom:1px solid var(--border);margin-bottom:4px"><span>Description</span><span>Amount</span></div>
+    <div id="inv-d-rows"></div>
+    <div class="inv-total-row"><span>Total Due</span><span id="inv-d-total">$0.00</span></div>
+    <div id="inv-d-notes" style="margin-top:14px;font-size:12px;color:var(--text3)"></div>
+  </div>
+  <div style="margin-top:14px;display:flex;gap:8px">
+    <button class="btn btn-primary" onclick="window.print()">Print Invoice</button>
+  </div>
+</div>
+
+<!-- ════ PROPOSAL GENERATOR ════ -->
+<div id="page-proposal" class="page">
+  <div class="page-head">
+    <div class="page-title">Proposal <span>Generator</span></div>
+    <div class="page-desc">Fill in the fields — a ready-to-send proposal generates automatically.</div>
+  </div>
+  <div class="grid g2" style="align-items:start">
+    <div class="card">
+      <div class="field"><label>Client Business Name</label><input type="text" id="pr-biz" placeholder="Mike's HVAC Services" oninput="buildProposal()"></div>
+      <div class="field"><label>Client First Name</label><input type="text" id="pr-name" placeholder="Mike" oninput="buildProposal()"></div>
+      <div class="field"><label>Industry / Niche</label><select id="pr-niche" onchange="buildProposal()">
+        <option>HVAC</option><option>Hair Salon</option><option>Barber Shop</option><option>Cleaning Business</option>
+        <option>Mechanic Shop</option><option>Restaurant</option><option>Nail Salon</option><option>Landscaping</option><option>Personal Trainer</option>
+      </select></div>
+      <div class="field"><label>Package</label><select id="pr-pkg" onchange="buildProposal()">
+        <option value="Starter — $300">Starter ($300)</option>
+        <option value="Standard — $600">Standard ($600)</option>
+        <option value="Premium — $1,000">Premium ($1,000)</option>
+      </select></div>
+      <div class="field"><label>Key Features (comma separated)</label><input type="text" id="pr-features" placeholder="contact form, Google Maps, gallery" oninput="buildProposal()"></div>
+      <div class="field"><label>Estimated Delivery</label><input type="text" id="pr-delivery" placeholder="7–10 business days" oninput="buildProposal()"></div>
+      <div class="field"><label>Your Name</label><input type="text" id="pr-you" value="KP" oninput="buildProposal()"></div>
+    </div>
+    <div>
+      <div class="script-box" style="min-height:300px">
+        <button class="copy-btn" onclick="copyEl(this,'proposal-text')">Copy</button>
+        <div id="proposal-text" style="white-space:pre-line;line-height:1.8"></div>
+      </div>
+      <div class="info-bar orange" style="margin-top:10px">This generates a clean message you paste into a DM, email, or text. Edit before sending as needed.</div>
+    </div>
+  </div>
+
+  <div class="section" style="margin-top:24px">
+    <h2>Client Questionnaire — Copy and Send Before Starting</h2>
+    <div class="script-box">
+      <button class="copy-btn" onclick="copyEl(this,'questionnaire')">Copy</button>
+      <div id="questionnaire"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ SCOPE CREEP TRACKER ════ -->
+<div id="page-scope" class="page">
+  <div class="page-head">
+    <div class="page-title">Scope Creep <span>Tracker</span></div>
+    <div class="page-desc">Log every extra request per project. Know what you're owed before you write the invoice.</div>
+  </div>
+  <div class="grid g2" style="align-items:start">
+    <div class="card">
+      <h2>Log a Change Request</h2>
+      <div class="field"><label>Client / Project Name</label><input type="text" id="sc-proj" placeholder="Mike's HVAC"></div>
+      <div class="field"><label>What they asked for</label><input type="text" id="sc-req" placeholder="Add a second services page"></div>
+      <div class="field"><label>Estimated Hours</label><input type="number" id="sc-hrs" value="2" min="0.5" step="0.5"></div>
+      <div class="field"><label>Status</label>
+        <select id="sc-status">
+          <option>Pending — not yet charged</option>
+          <option>Included — goodwill</option>
+          <option>Invoiced</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="addScopeItem()" style="margin-top:4px">Log Request</button>
+    </div>
+    <div>
+      <div class="grid g2" style="gap:10px;margin-bottom:14px">
+        <div class="kpi"><div class="kpi-label">Billable Hours Logged</div><div class="kpi-val orange" id="sc-total-hrs">0</div></div>
+        <div class="kpi"><div class="kpi-label">Amount Owed ($75/hr)</div><div class="kpi-val green" id="sc-total-amt">$0</div></div>
+      </div>
+      <div class="info-bar yellow">Scope creep rate: <strong>$75/hr</strong>. Log everything — even requests you absorb — so you can spot patterns.</div>
+    </div>
+  </div>
+  <div class="section" style="margin-top:20px">
+    <h2>Change Request Log</h2>
+    <div class="card card-flush">
+      <table class="tbl" id="scope-table">
+        <thead><tr><th>Project</th><th>Request</th><th>Hours</th><th>Amount</th><th>Status</th><th></th></tr></thead>
+        <tbody id="scope-tbody"><tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px">No requests logged yet.</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ════ SAVED QUOTES ════ -->
+<div id="page-savedquotes" class="page">
+  <div class="page-head">
+    <div class="page-title">Saved <span>Quotes</span></div>
+    <div class="page-desc">Compare quotes side by side. Saved in your browser — they persist between sessions.</div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+    <div style="font-size:13px;color:var(--text3)" id="sq-count">0 quotes saved</div>
+    <button class="btn btn-danger btn-sm" onclick="clearQuotes()">Clear All</button>
+  </div>
+  <div id="sq-list"></div>
+  <div id="sq-compare" style="margin-top:24px"></div>
+</div>
+
+<!-- ════ WORKFLOW ════ -->
+<div id="page-workflow" class="page">
+  <div class="page-head">
+    <div class="page-title">Workflow <span>Guide</span></div>
+    <div class="page-desc">Every step from first contact to final payment — for every project.</div>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('wf','process',this)">Process</div>
+    <div class="tab" onclick="switchTab('wf','toolstack',this)">Tool Stack</div>
+    <div class="tab" onclick="switchTab('wf','timeline',this)">Timeline</div>
+    <div class="tab" onclick="switchTab('wf','handoff',this)">Handoff</div>
+  </div>
+  <div id="wf-process">
+    <div class="card"><ul class="step-list">
+      <li><div class="step-num">1</div><div class="step-body"><strong>Discovery Call</strong><span>Ask what they do, who their customers are, what pages they want, and what sites they like. Use the Onboarding checklist.</span></div></li>
+      <li><div class="step-num">2</div><div class="step-body"><strong>Collect Assets</strong><span>Logo (PNG, transparent), photos, text content, address, hours, social links. Build a logo in Canva if they need one.</span></div></li>
+      <li><div class="step-num">3</div><div class="step-body"><strong>Pick Your Platform</strong><span>Webflow (best output, free tier), GitHub Pages (free forever, code-based), Framer (design-forward), or WordPress (client edits own content).</span></div></li>
+      <li><div class="step-num">4</div><div class="step-body"><strong>Canva Mockup First</strong><span>Before building anything — show the client a rough layout in Canva. Get approval. Saves massive revision time later.</span></div></li>
+      <li><div class="step-num">5</div><div class="step-body"><strong>Build + Write Copy</strong><span>Build in your chosen platform. Use Claude or ChatGPT to write all the text. Embed Calendly, Formspree, Maps as needed.</span></div></li>
+      <li><div class="step-num">6</div><div class="step-body"><strong>Test Everything</strong><span>Mobile, tablet, desktop. All forms, all links, all buttons. Fix before client ever sees it.</span></div></li>
+      <li><div class="step-num">7</div><div class="step-body"><strong>Client Review (2 rounds max)</strong><span>Send preview link. Collect one batch of feedback per round. Extra changes beyond 2 rounds = $75/hr.</span></div></li>
+      <li><div class="step-num">8</div><div class="step-body"><strong>Launch + Handoff</strong><span>Connect custom domain (~$12/yr, Namecheap). Record Loom walkthrough. Send handoff doc. Collect final payment. Pitch retainer.</span></div></li>
+    </ul></div>
+  </div>
+  <div id="wf-toolstack" style="display:none">
+    <div class="card card-flush">
+      <table class="tbl">
+        <thead><tr><th>Tool</th><th>What You Use It For</th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Webflow</strong></td><td>Visual site builder — best quality output, hosts on .webflow.io for free</td><td class="tbl-num" style="color:var(--green)">Free / $14 client</td></tr>
+          <tr><td><strong>GitHub Pages</strong></td><td>Free forever hosting for hand-coded HTML/CSS sites</td><td class="tbl-num" style="color:var(--green)">Free</td></tr>
+          <tr><td><strong>Canva</strong></td><td>Logos, page mockups, social graphics, client proposals</td><td class="tbl-num" style="color:var(--green)">Free</td></tr>
+          <tr><td><strong>Calendly</strong></td><td>Booking widget embedded in any site — syncs with Google Calendar</td><td class="tbl-num" style="color:var(--green)">Free tier</td></tr>
+          <tr><td><strong>Formspree</strong></td><td>Makes HTML contact forms send emails — no backend needed</td><td class="tbl-num" style="color:var(--green)">Free (50/mo)</td></tr>
+          <tr><td><strong>Tawk.to</strong></td><td>Live chat widget — client manages from phone</td><td class="tbl-num" style="color:var(--green)">Free</td></tr>
+          <tr><td><strong>Claude / ChatGPT</strong></td><td>Write all copy, fix code, generate ideas, debug errors</td><td class="tbl-num" style="color:var(--green)">Free tiers</td></tr>
+          <tr><td><strong>Loom</strong></td><td>Record a site walkthrough video for client handoff</td><td class="tbl-num" style="color:var(--green)">Free tier</td></tr>
+          <tr><td><strong>Namecheap</strong></td><td>Buy custom domains for clients (~$12/yr)</td><td class="tbl-num">~$12/yr</td></tr>
+          <tr><td><strong>Google Analytics</strong></td><td>Track site visitors — shows client their traffic</td><td class="tbl-num" style="color:var(--green)">Free</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id="wf-timeline" style="display:none">
+    <div class="card"><div class="tl">
+      <div class="tl-item"><div class="tl-day">Day 1</div><div class="tl-title">Discovery + Onboarding</div><div class="tl-desc">Call with client. Fill onboarding checklist. Collect all assets. Take 50% deposit.</div></div>
+      <div class="tl-item"><div class="tl-day">Day 2–3</div><div class="tl-title">Canva Mockup</div><div class="tl-desc">Build a rough layout in Canva. Send for client approval before writing a single line of code.</div></div>
+      <div class="tl-item"><div class="tl-day">Day 3–7</div><div class="tl-title">Build + Write</div><div class="tl-desc">Build in Webflow or GitHub. Use Claude for all copy. Embed extras (Calendly, Formspree, Maps).</div></div>
+      <div class="tl-item"><div class="tl-day">Day 8</div><div class="tl-title">Internal Test</div><div class="tl-desc">Test on mobile + desktop. Every form, link, and button. Fix everything before sending to client.</div></div>
+      <div class="tl-item"><div class="tl-day">Day 9–10</div><div class="tl-title">Client Review</div><div class="tl-desc">Send preview link. Collect feedback. Max 2 revision rounds. Get written approval on each.</div></div>
+      <div class="tl-item"><div class="tl-day">Day 11–14</div><div class="tl-title">Launch + Handoff</div><div class="tl-desc">Connect domain. Record Loom. Send handoff doc. Collect final 50%. Pitch $150/mo retainer.</div></div>
+    </div></div>
+  </div>
+  <div id="wf-handoff" style="display:none">
+    <div class="card"><ul class="check-list" id="handoff-list">
+      <li><input type="checkbox" id="hf1"><label for="hf1"> Site is live on the client's custom domain</label></li>
+      <li><input type="checkbox" id="hf2"><label for="hf2"> All contact forms tested and receiving emails</label></li>
+      <li><input type="checkbox" id="hf3"><label for="hf3"> Mobile and desktop both display correctly</label></li>
+      <li><input type="checkbox" id="hf4"><label for="hf4"> Client login credentials sent securely</label></li>
+      <li><input type="checkbox" id="hf5"><label for="hf5"> Loom walkthrough video recorded and sent</label></li>
+      <li><input type="checkbox" id="hf6"><label for="hf6"> Google Business profile linked (if applicable)</label></li>
+      <li><input type="checkbox" id="hf7"><label for="hf7"> Booking system connected to client's calendar</label></li>
+      <li><input type="checkbox" id="hf8"><label for="hf8"> Final 50% payment collected</label></li>
+      <li><input type="checkbox" id="hf9"><label for="hf9"> Monthly retainer upsell offered ($150/mo)</label></li>
+      <li><input type="checkbox" id="hf10"><label for="hf10"> Google review or testimonial requested</label></li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ════ SCRIPTS ════ -->
+<div id="page-scripts" class="page">
+  <div class="page-head">
+    <div class="page-title">Sales <span>Scripts</span></div>
+    <div class="page-desc">Copy-ready messages for every situation — outreach, objections, follow-ups, closing.</div>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('ss','cold',this)">Cold Outreach</div>
+    <div class="tab" onclick="switchTab('ss','objections',this)">Objections</div>
+    <div class="tab" onclick="switchTab('ss','followup',this)">Follow-Up</div>
+    <div class="tab" onclick="switchTab('ss','close',this)">Closing</div>
+    <div class="tab" onclick="switchTab('ss','negotiation',this)">Negotiation</div>
+    <div class="tab" onclick="switchTab('ss','redflags',this)">Red Flags</div>
+  </div>
+
+  <div id="ss-cold">
+    <div style="margin-bottom:14px"><h3 style="margin-bottom:8px">DM / Text — Generic Opener</h3>
+    <div class="script-box"><button class="copy-btn" onclick="copyEl(this,'sc1')">Copy</button><div id="sc1">Hey [Name], I noticed [Business Name] doesn't have a website yet. I help local businesses get online fast — clean, professional sites starting at $300. Would love to show you what I can do. Interested?</div></div></div>
+    <div style="margin-bottom:14px"><h3 style="margin-bottom:8px">Instagram / Facebook — Salons & Barbers</h3>
+    <div class="script-box"><button class="copy-btn" onclick="copyEl(this,'sc2')">Copy</button><div id="sc2">Love what you do at [Business Name]. Quick question — do you have a website where people can book appointments? I build sites for local salons starting at $300, usually ready in about a week. Happy to send some examples if you're curious.</div></div></div>
+    <div><h3 style="margin-bottom:8px">In-Person / Phone</h3>
+    <div class="script-box"><button class="copy-btn" onclick="copyEl(this,'sc3')">Copy</button><div id="sc3">Hey, I'm KP — I do freelance web design for small businesses locally. I help businesses like yours get a professional website up fast, starting at $300. Most clients start getting calls from it within the first month. Do you have a website right now?</div></div></div>
+  </div>
+
+  <div id="ss-objections" style="display:none">
+    <div style="margin-bottom:16px"><div class="info-bar yellow" style="margin-bottom:8px"><strong>"I can just use Wix or Squarespace."</strong></div>
+    <div class="script-box"><button class="copy-btn" onclick="copyEl(this,'so1')">Copy</button><div id="so1">You absolutely can — and some people do. But most business owners are too busy running their business to learn a website builder and keep it updated. You're not paying for a website. You're paying to never think about it again. I handle the build, the setup, and I'm there if something needs changing.</div></div></div>
+    <div style="margin-bottom:16px"><div class="info-bar yellow" style="margin-bottom:8px"><strong>"It's too expensive right now."</strong></div>
+    <div class="script-box"><button class="copy-btn" onclick="copyEl(this,'so2')">Copy</button><div id="so2">That's fair — and it's actually why this makes sense now. If your site brings in even two new customers a month, it pays for itself in the first 30 days. I also split it in half — 50% to start, 50% when it goes live. So you're only putting down $[half] today.</div></div></div>
+    <div><div class="info-bar yellow" style="margin-bottom:8px"><strong>"I already have someone working on it."</strong></div>
+    <div class="script-box"><button class="copy-btn" onclick="copyEl(this,'so3')">Copy</button><div id="so3">No problem at all — keep my info. I turn projects around fast and I'm always transparent about pricing. If it ever doesn't work out, reach out and I'll take care of you. No pressure.</div></div></div>
+  </div>
+
+  <div id="ss-followup" style="display:none">
+    <div style="margin-bottom:14px"><h3 style="margin-bottom:8px">3 Days After First Message</h3>
+    <div class="script-box"><button class="copy-btn" onclick="copyEl(this,'sf1')">Copy</button><div id="sf1">Hey [Name], just checking in — did my last message reach you? No pressure at all. Happy to send over some examples of sites I've built if that helps you get a feel for my work.</div></div></div>
+    <div><h3 style="margin-bottom:8px">1 Week Later — Final</h3>
+    <div class="script-box"><button class="copy-btn" onclick="copyEl(this,'sf2')">Copy</button><div id="sf2">Last one from me — I know you're busy. If a website ever becomes a priority, I'm here. I usually book out 1–2 weeks ahead so just reach out when you're ready. Wishing you a great week.</div></div></div>
+  </div>
+
+  <div id="ss-close" style="display:none">
+    <div style="margin-bottom:14px"><h3 style="margin-bottom:8px">Closing the Deal</h3>
+    <div class="script-box"><button class="copy-btn" onclick="copyEl(this,'scl1')">Copy</button><div id="scl1">Perfect. So the total is $[amount]. I ask for 50% upfront — $[half] — to lock in your spot and get started, then the other half when the site goes live. I take Venmo, Cash App, Zelle, or PayPal. Want to get started?</div></div></div>
+    <div><h3 style="margin-bottom:8px">After Payment Received</h3>
+    <div class="script-box"><button class="copy-btn" onclick="copyEl(this,'scl2')">Copy</button><div id="scl2">Payment received — thank you. I'll send over a quick form to collect your info (logo, photos, colors, services) and we'll be off. Target completion: [date]. Excited to build something great for [Business Name].</div></div></div>
+  </div>
+
+  <div id="ss-negotiation" style="display:none">
+    <div class="info-bar orange" style="margin-bottom:16px">These scripts are for when a client likes the work but pushes back on price. Never drop below your floor price.</div>
+    <div style="margin-bottom:14px"><h3 style="margin-bottom:8px">They Want a Discount</h3>
+    <div class="script-box"><button class="copy-btn" onclick="copyEl(this,'sn1')">Copy</button><div id="sn1">I appreciate you asking — I don't have much flexibility on price because my rates already reflect the actual time it takes to do good work. What I can do is adjust what's included. If we drop [feature], I can bring it down to $[lower]. Does that work, or would you rather keep everything and stick with the original?</div></div></div>
+    <div style="margin-bottom:14px"><h3 style="margin-bottom:8px">They Want More for the Same Price</h3>
+    <div class="script-box"><button class="copy-btn" onclick="copyEl(this,'sn2')">Copy</button><div id="sn2">I want to make sure I deliver real quality, which means I need to keep the scope tight for this budget. If you want to add [extra feature], I can do that for an additional $[price]. Otherwise I'll focus on doing the agreed scope really well — which is going to get you results on its own.</div></div></div>
+    <div><h3 style="margin-bottom:8px">Contract / Retainer Discount</h3>
+    <div class="script-box"><button class="copy-btn" onclick="copyEl(this,'sn3')">Copy</button><div id="sn3">If you want to lock in 3 months of retainer upfront, I'll give you 10% off — so instead of $450 over three months, it's $405. You get stability on your end, I get consistency on mine. Want to do that?</div></div></div>
+  </div>
+
+  <div id="ss-redflags" style="display:none">
+    <div class="info-bar red" style="margin-bottom:16px"><strong>Red flags = charge more or walk away.</strong> These signals mean the project will cost you more in time, stress, and revisions than the quote suggests.</div>
+    <div class="flag-item"><strong>"We'll figure out the details as we go."</strong> Vague scope always expands. Get every deliverable in writing before taking a deposit.</div>
+    <div class="flag-item"><strong>"My nephew said he could do it for $50."</strong> Price-anchoring with a low-ball comparison. Respond with value, not defensiveness. If they keep pushing, they're not your client.</div>
+    <div class="flag-item"><strong>"Can you just do a quick change?" (×5)</strong> Death by a thousand favors. Log every "quick" request in the Scope Creep Tracker. After the 2nd free change, start billing.</div>
+    <div class="flag-item"><strong>"I need it done by Friday." (It's Wednesday.)</strong> Rush fee applies. Always. 30% minimum. Do not let urgency pressure you into dropping your rate.</div>
+    <div class="flag-item"><strong>"I'll know what I want when I see it."</strong> No defined brief = unlimited revisions. Require a written brief or Canva mockup approval before building anything.</div>
+    <div class="flag-item"><strong>"Can we do the payment after it's done?"</strong> Never. 50% upfront is non-negotiable. No deposit = no protection. If they refuse, walk.</div>
+    <div class="flag-item"><strong>They're rude, dismissive, or hard to reach in the sales process.</strong> That behavior triples when they're a paying client. Trust your gut. Problem clients cost more than they're worth.</div>
+  </div>
+</div>
+
+<!-- ════ ONBOARDING ════ -->
+<div id="page-onboarding" class="page">
+  <div class="page-head">
+    <div class="page-title">Client <span>Onboarding</span></div>
+    <div class="page-desc">Everything to collect and ask before starting any project.</div>
+  </div>
+  <div class="grid g2">
+    <div class="card">
+      <h2>Assets to Collect</h2>
+      <ul class="check-list">
+        <li><input type="checkbox" id="oc1"><label for="oc1"> Business name and tagline</label></li>
+        <li><input type="checkbox" id="oc2"><label for="oc2"> Address and hours of operation</label></li>
+        <li><input type="checkbox" id="oc3"><label for="oc3"> Phone number and email</label></li>
+        <li><input type="checkbox" id="oc4"><label for="oc4"> Logo (PNG, transparent background)</label></li>
+        <li><input type="checkbox" id="oc5"><label for="oc5"> Photos of business, work, or team</label></li>
+        <li><input type="checkbox" id="oc6"><label for="oc6"> Brand colors (hex codes or visual examples)</label></li>
+        <li><input type="checkbox" id="oc7"><label for="oc7"> Full list of services and prices</label></li>
+        <li><input type="checkbox" id="oc8"><label for="oc8"> All social media links</label></li>
+        <li><input type="checkbox" id="oc9"><label for="oc9"> Examples of sites they like</label></li>
+        <li><input type="checkbox" id="oc10"><label for="oc10"> Do they have a domain already?</label></li>
+        <li><input type="checkbox" id="oc11"><label for="oc11"> Any specific features they want</label></li>
+        <li><input type="checkbox" id="oc12"><label for="oc12"> 50% deposit received</label></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Discovery Call Questions</h2>
+      <ul class="step-list">
+        <li><div class="step-num">Q</div><div class="step-body"><strong>Do you have a website now?</strong><span>If yes — what's wrong with it? If no — why not?</span></div></li>
+        <li><div class="step-num">Q</div><div class="step-body"><strong>Who are your customers?</strong><span>Informs tone, copy, and design direction immediately.</span></div></li>
+        <li><div class="step-num">Q</div><div class="step-body"><strong>What should the site actually do?</strong><span>Get calls? Bookings? Show work? Sell products? This defines success.</span></div></li>
+        <li><div class="step-num">Q</div><div class="step-body"><strong>Any sites you like the look of?</strong><span>Saves hours of back-and-forth on visual direction.</span></div></li>
+        <li><div class="step-num">Q</div><div class="step-body"><strong>What's your timeline?</strong><span>Sets expectations. Rush = higher price.</span></div></li>
+        <li><div class="step-num">Q</div><div class="step-body"><strong>Open to a monthly retainer?</strong><span>Mention $150/mo — updates, backup, hosting management.</span></div></li>
+      </ul>
+      <div class="info-bar orange" style="margin-top:14px">Revision policy: <strong>2 rounds included.</strong> Extra changes = $75/hr. Send this in writing before starting every project.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ ALL TOOLS ════ -->
+<div id="page-tools" class="page">
+  <div class="page-head">
+    <div class="page-title">All <span>Tools</span></div>
+    <div class="page-desc">Your full stack — what each tool does, what it costs, and when to use it.</div>
+  </div>
+  <div class="section">
+    <h2>Website Builders</h2>
+    <div class="card card-flush"><table class="tbl">
+      <thead><tr><th>Tool</th><th>Best For</th><th>Cost</th><th>Difficulty</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Webflow</strong></td><td>Beautiful custom sites — best output, visual builder</td><td class="tbl-num" style="color:var(--green)">Free → $14/mo client</td><td><span class="badge badge-yellow">Medium</span></td></tr>
+        <tr><td><strong>GitHub Pages</strong></td><td>Hand-coded HTML/CSS — free hosting forever</td><td class="tbl-num" style="color:var(--green)">Free</td><td><span class="badge badge-yellow">Medium</span></td></tr>
+        <tr><td><strong>Framer</strong></td><td>Design-forward, modern animations</td><td class="tbl-num" style="color:var(--green)">Free → $15/mo</td><td><span class="badge badge-yellow">Medium</span></td></tr>
+        <tr><td><strong>WordPress.com</strong></td><td>Clients who need to edit their own content</td><td class="tbl-num">Free → $4/mo</td><td><span class="badge badge-green">Easy</span></td></tr>
+        <tr><td><strong>Squarespace</strong></td><td>Quick restaurant or portfolio sites</td><td class="tbl-num">$16/mo client</td><td><span class="badge badge-green">Easy</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="section">
+    <h2>Design</h2>
+    <div class="card card-flush"><table class="tbl">
+      <thead><tr><th>Tool</th><th>Use It For</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Canva</strong></td><td>Logos, mockups, social graphics, proposals</td><td class="tbl-num" style="color:var(--green)">Free (Pro optional)</td></tr>
+        <tr><td><strong>Adobe Express</strong></td><td>Quick social graphics, logo edits</td><td class="tbl-num" style="color:var(--green)">Free tier</td></tr>
+        <tr><td><strong>Figma</strong></td><td>Detailed wireframes — advanced, optional</td><td class="tbl-num" style="color:var(--green)">Free tier</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+  <div class="section">
+    <h2>Free Integrations</h2>
+    <div class="card card-flush"><table class="tbl">
+      <thead><tr><th>Tool</th><th>What It Does</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Calendly</strong></td><td>Booking widget embedded in any site</td><td class="tbl-num" style="color:var(--green)">Free tier</td></tr>
+        <tr><td><strong>Formspree</strong></td><td>Contact forms that email the client — no backend</td><td class="tbl-num" style="color:var(--green)">Free (50/mo)</td></tr>
+        <tr><td><strong>Tawk.to</strong></td><td>Live chat managed from phone</td><td class="tbl-num" style="color:var(--green)">Free</td></tr>
+        <tr><td><strong>Google Maps Embed</strong></td><td>Map on site via iframe</td><td class="tbl-num" style="color:var(--green)">Free</td></tr>
+        <tr><td><strong>Google Analytics</strong></td><td>Track site visitors</td><td class="tbl-num" style="color:var(--green)">Free</td></tr>
+        <tr><td><strong>Mailchimp</strong></td><td>Email newsletter signup</td><td class="tbl-num" style="color:var(--green)">Free ≤500 contacts</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /shell -->
+
+<script>
+// ═══════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════
+const BIZ = [
+  { id:'hvac', name:'HVAC', range:'$300–$700', diff:'Medium', diffC:'yellow', pct:60,
+    desc:'Lead generation and phone calls are everything. Not e-commerce.',
+    needs:['Service list page','Emergency click-to-call button','Google Maps + service area','Quote request form','Before/after photo gallery','Multi-location support (Premium)'],
+    tools:[{n:'Webflow / GitHub Pages',u:'Build the site',c:'Free'},{n:'Formspree',u:'Quote request form → instant email to owner',c:'Free'},{n:'Google Maps Embed',u:'Show service coverage area',c:'Free'},{n:'Claude / ChatGPT',u:'Write service descriptions and FAQs',c:'Free'}],
+    pricing:[{pkg:'Starter',p:'$300',d:'5 pages, contact form, Maps, mobile-ready',t:'4–6 hrs'},{pkg:'Standard',p:'$500',d:'+ Quote form, gallery, service area, basic SEO',t:'8–12 hrs'},{pkg:'Premium',p:'$700',d:'+ Blog, live chat, Analytics, multiple locations',t:'14–18 hrs'}],
+    gotcha:'Make the primary CTA a click-to-call phone link — not a form. HVAC leads are urgent. Too many steps = lost job.',
+    pitch:'When someone\'s AC breaks in summer, they Google it immediately. You want to be the first result they see — with a phone number they can tap.' },
+  { id:'salon', name:'Hair Salon', range:'$350–$800', diff:'Medium', diffC:'yellow', pct:65,
+    desc:'Booking is the #1 priority. Gallery photos convert visitors into booked appointments.',
+    needs:['Online booking widget (Calendly)','Stylist profiles','Photo gallery','Services and pricing menu','Instagram feed embed','Gift card info'],
+    tools:[{n:'Calendly',u:'Free booking widget — syncs with Google Calendar',c:'Free'},{n:'Webflow',u:'Build the full site visually',c:'Free'},{n:'Canva',u:'Gallery layouts, pricing menus, social posts',c:'Free'},{n:'Claude',u:'Write stylist bios and service descriptions',c:'Free'}],
+    pricing:[{pkg:'Starter',p:'$350',d:'5 pages, gallery, hours, contact form',t:'5–7 hrs'},{pkg:'Standard',p:'$600',d:'+ Calendly booking, stylist profiles, pricing page',t:'9–13 hrs'},{pkg:'Premium',p:'$800',d:'+ Instagram feed, gift cards page, full SEO',t:'14–18 hrs'}],
+    gotcha:'Clients will want to update their gallery constantly. Either teach them (Webflow is learnable) or lock in a $150/mo retainer for ongoing updates.',
+    pitch:'Your portfolio is everything in this industry. A beautiful website with real photos converts a visitor into a booked appointment before they even call.' },
+  { id:'barber', name:'Barber Shop', range:'$300–$650', diff:'Easy', diffC:'green', pct:45,
+    desc:'Community-driven. Strong brand vibe matters as much as the booking system.',
+    needs:['Online booking system','Barber profiles + specialties','Services and pricing','Location and hours','Photo gallery','Walk-in vs appointment policy'],
+    tools:[{n:'Calendly / Square Appts',u:'Free booking that embeds anywhere',c:'Free'},{n:'Webflow',u:'Build a sharp branded site',c:'Free'},{n:'Canva',u:'Logo, brand graphics, barber cards',c:'Free'},{n:'ChatGPT',u:'Write taglines and barber bios',c:'Free'}],
+    pricing:[{pkg:'Starter',p:'$300',d:'4 pages, pricing, hours, location',t:'3–5 hrs'},{pkg:'Standard',p:'$500',d:'+ Booking, barber profiles, gallery',t:'7–10 hrs'},{pkg:'Premium',p:'$650',d:'+ Brand identity, merch page, loyalty info',t:'11–14 hrs'}],
+    gotcha:'Many barbers already use Instagram as their main presence. Frame your pitch around what happens when someone Googles them and only Instagram shows up.',
+    pitch:'People pick a barber based on vibe and trust. A clean website builds that trust before they ever walk in the door.' },
+  { id:'cleaning', name:'Cleaning Business', range:'$300–$600', diff:'Easy', diffC:'green', pct:40,
+    desc:'Pure lead generation. Quote forms and click-to-call are the two most valuable features.',
+    needs:['Quote request form','Service list (residential / commercial)','Before/after photos','Trust signals (reviews, years in business)','Coverage area','Pricing guide'],
+    tools:[{n:'Formspree',u:'Quote form → instant email to owner, no backend',c:'Free'},{n:'GitHub Pages',u:'Fast, free hosting for lean sites',c:'Free'},{n:'Canva',u:'Logo, before/after collages, trust badge graphics',c:'Free'},{n:'Claude',u:'Write persuasive "Why Us" copy and testimonials',c:'Free'}],
+    pricing:[{pkg:'Starter',p:'$300',d:'4 pages, quote form, service list, area',t:'4–6 hrs'},{pkg:'Standard',p:'$500',d:'+ Gallery, pricing guide, Google reviews embed',t:'8–11 hrs'},{pkg:'Premium',p:'$600',d:'+ Live chat, Analytics, blog for SEO',t:'12–15 hrs'}],
+    gotcha:'Keep the quote form dead simple: name, phone, type of cleaning, square footage. Every extra field costs you a lead.',
+    pitch:'When someone needs a cleaner, they Google it. The business with a real website beats one with just a Facebook page every single time.' },
+  { id:'mechanic', name:'Mechanic Shop', range:'$300–$700', diff:'Medium', diffC:'yellow', pct:60,
+    desc:'Trust is the product. Reviews, certifications, and plain-English service descriptions win customers.',
+    needs:['Services list with prices','Appointment scheduling','Location and hours','Trust signals (ASE certified, etc.)','Customer reviews section','Emergency contact'],
+    tools:[{n:'Calendly',u:'Appointment booking for service slots',c:'Free'},{n:'Webflow',u:'Build a trustworthy clean site',c:'Free'},{n:'Canva',u:'Logo, service cards, certification badge graphics',c:'Free'},{n:'Claude',u:'Explain complex repairs in plain English',c:'Free'}],
+    pricing:[{pkg:'Starter',p:'$300',d:'5 pages, services, hours, contact form',t:'4–6 hrs'},{pkg:'Standard',p:'$500',d:'+ Appointments, reviews section, certifications',t:'8–12 hrs'},{pkg:'Premium',p:'$700',d:'+ Blog (car tips = SEO), chat, Analytics',t:'14–18 hrs'}],
+    gotcha:'Long service lists look overwhelming. Group everything into 4–6 categories (Engine, Brakes, AC, Tires, Electrical, General) and let clients expand.',
+    pitch:'People are trusting you with a $20,000+ vehicle. A professional website signals you take your craft as seriously as they take their car.' },
+  { id:'restaurant', name:'Restaurant / Food', range:'$400–$1,100', diff:'Complex', diffC:'red', pct:85,
+    desc:'Menus, reservations, and food photos. Most complex niche — charge accordingly.',
+    needs:['Digital menu (PDF or built-in)','Online reservations','Location and hours','Food photo gallery','Online ordering (optional)','Events and specials page'],
+    tools:[{n:'OpenTable / Resy embed',u:'Free reservation widget',c:'Free'},{n:'Webflow / Squarespace',u:'Build site with visual menu',c:'Free–$16/mo'},{n:'Canva',u:'Menu design, food photo editing, promo banners',c:'Free'},{n:'Ecwid / Shopify Lite',u:'Online ordering if needed',c:'Free–$9/mo'}],
+    pricing:[{pkg:'Starter',p:'$400',d:'5 pages, PDF menu, hours, reservation link',t:'5–8 hrs'},{pkg:'Standard',p:'$750',d:'+ Built-in menu, gallery, events page, Google',t:'10–14 hrs'},{pkg:'Premium',p:'$1,100',d:'+ Online ordering, loyalty signup, SEO, brand',t:'18–25 hrs'}],
+    gotcha:'Menus change constantly. Either build it so they can edit it themselves or lock in a retainer. Online ordering integrations are genuinely complex — price them properly.',
+    pitch:'Over 90% of diners look at a restaurant\'s website before deciding to go. A bad site or missing menu sends them to your competitor.' },
+  { id:'nails', name:'Nail Salon', range:'$300–$650', diff:'Easy', diffC:'green', pct:45,
+    desc:'Visual and aesthetic-driven. Booking and gallery are the two features that matter most.',
+    needs:['Online booking','Services and pricing menu','Gallery (gel, acrylic, nail art)','Nail tech profiles','Cancellation and no-show policy'],
+    tools:[{n:'Vagaro / Booksy embed',u:'Booking systems popular in the nail industry',c:'Free'},{n:'Webflow',u:'Build a beautiful aesthetic site',c:'Free'},{n:'Canva',u:'Gallery layouts, price menus, nail art showcase',c:'Free'}],
+    pricing:[{pkg:'Starter',p:'$300',d:'4 pages, pricing, gallery, contact',t:'3–5 hrs'},{pkg:'Standard',p:'$500',d:'+ Booking widget, nail tech profiles, policy page',t:'7–10 hrs'},{pkg:'Premium',p:'$650',d:'+ Full brand design, Instagram feed, newsletter',t:'11–14 hrs'}],
+    gotcha:'Nail salon owners often have very specific aesthetic visions. Get clear on the vibe with a Canva mockup before writing a single line of code.',
+    pitch:'Clients pick a nail salon based on their feed and their website. Make it as beautiful as the work you do.' },
+  { id:'landscaping', name:'Landscaping', range:'$300–$650', diff:'Easy', diffC:'green', pct:40,
+    desc:'Seasonal business. Portfolio of past work and a quote form are the most valuable pages.',
+    needs:['Before/after project gallery','Services list','Quote request form','Service area','Seasonal promotions','Click-to-call CTA'],
+    tools:[{n:'Formspree',u:'Quote form — the primary lead driver',c:'Free'},{n:'GitHub Pages / Webflow',u:'Clean fast site with gallery',c:'Free'},{n:'Canva',u:'Before/after collages, seasonal banners',c:'Free'},{n:'Claude',u:'Seasonal content and service descriptions',c:'Free'}],
+    pricing:[{pkg:'Starter',p:'$300',d:'4 pages, quote form, services, gallery',t:'4–6 hrs'},{pkg:'Standard',p:'$500',d:'+ Service area, seasonal promotions, reviews',t:'8–11 hrs'},{pkg:'Premium',p:'$650',d:'+ SEO, lawn care blog, Analytics',t:'12–15 hrs'}],
+    gotcha:'Landscaping goes quiet in winter. Pitch an annual contract or retainer that includes seasonal content updates — keeps revenue steady year-round.',
+    pitch:'Homeowners search for landscapers when they\'re ready to spend. Your before/after photos close the deal before you even pick up the phone.' },
+  { id:'trainer', name:'Personal Trainer', range:'$300–$700', diff:'Medium', diffC:'yellow', pct:60,
+    desc:'The trainer is the brand. Transformation results and credibility win clients.',
+    needs:['Session booking','Training packages and pricing','Transformation photo gallery','About and credentials page','Free consultation form','Optional fitness blog'],
+    tools:[{n:'Calendly',u:'Book sessions and free consult calls',c:'Free'},{n:'Webflow',u:'Build a motivating high-energy site',c:'Free'},{n:'Canva',u:'Package graphics, transformation layouts',c:'Free'},{n:'Claude',u:'Package descriptions and fitness blog posts',c:'Free'}],
+    pricing:[{pkg:'Starter',p:'$300',d:'4 pages, about, packages, booking link',t:'4–6 hrs'},{pkg:'Standard',p:'$500',d:'+ Transformations, testimonials, consult form',t:'8–11 hrs'},{pkg:'Premium',p:'$700',d:'+ Blog, newsletter, full brand package',t:'12–16 hrs'}],
+    gotcha:'The trainer is the brand. Good photos of them are non-negotiable — bad headshots sink an otherwise great site. Offer to guide them on photo selection.',
+    pitch:'People want to see your results before they trust you with their body. A great website with real transformations does the selling before you ever meet.' },
+];
+
+// ═══════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════
+function nav(id) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  const page = document.getElementById('page-'+id);
+  if (page) page.classList.add('active');
+  document.querySelectorAll('.sb-item').forEach(i=>{
+    const oc = i.getAttribute('onclick')||'';
+    if (oc.includes(`'${id}'`)) i.classList.add('active');
+  });
+  window.scrollTo(0,0);
+}
+
+function switchTab(prefix, id, btn) {
+  const bar = btn.closest('.tabs');
+  bar.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  const ids = Array.from(bar.querySelectorAll('.tab')).map(t=>{
+    const m=(t.getAttribute('onclick')||'').match(/'([^']+)'\s*,\s*this/);
+    return m?m[1]:null;
+  }).filter(Boolean);
+  ids.forEach(i=>{const el=document.getElementById(prefix+'-'+i);if(el)el.style.display='none';});
+  const el=document.getElementById(prefix+'-'+id);
+  if(el) el.style.display='block';
+}
+
+// ═══════════════════════════════════════════
+// GOAL
+// ═══════════════════════════════════════════
+function updateGoal() {
+  const g = parseFloat(document.getElementById('goal-input').value)||0;
+  document.getElementById('ie-goal').value = g;
+  calcIncome();
+  updateDashGoal(g);
+}
+function updateDashGoal(g) {
+  const std = 600;
+  document.getElementById('dash-projects-needed').textContent = Math.ceil(g/std);
+  document.getElementById('dash-retainers-needed').textContent = Math.ceil(g/150);
+}
+
+// ═══════════════════════════════════════════
+// BIZ GRIDS
+// ═══════════════════════════════════════════
+function renderBizGrids() {
+  ['dash-biz-grid','main-biz-grid'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.innerHTML=BIZ.map(b=>`
+      <div class="biz-card" onclick="openBiz('${b.id}')">
+        <div class="biz-card-name">${b.name}</div>
+        <div class="biz-card-range">${b.range}</div>
+        <div class="biz-card-diff"><span class="badge badge-${b.diffC}">${b.diff}</span></div>
+        <div class="biz-card-bar"><div class="biz-card-bar-fill" style="width:${b.pct}%"></div></div>
+      </div>`).join('');
+  });
+}
+
+function openBiz(id) {
+  const b=BIZ.find(x=>x.id===id);
+  if(!b)return;
+  document.getElementById('biz-detail-body').innerHTML=`
+    <div style="margin-bottom:22px">
+      <div style="font-size:24px;font-weight:700;letter-spacing:-.4px;margin-bottom:4px">${b.name} <span class="badge badge-${b.diffC}" style="font-size:13px;vertical-align:middle">${b.diff}</span></div>
+      <div style="font-size:14px;color:var(--text2)">${b.desc}</div>
+    </div>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('bd','needs',this)">What They Need</div>
+      <div class="tab" onclick="switchTab('bd','bdtools',this)">Best Tools</div>
+      <div class="tab" onclick="switchTab('bd','bdpricing',this)">Pricing</div>
+      <div class="tab" onclick="switchTab('bd','bdpitch',this)">Pitch + Gotchas</div>
+    </div>
+    <div id="bd-needs"><div class="card"><ul class="step-list">${b.needs.map((n,i)=>`<li><div class="step-num">${i+1}</div><div class="step-body">${n}</div></li>`).join('')}</ul></div></div>
+    <div id="bd-bdtools" style="display:none">${b.tools.map(t=>`<div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:13px 16px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:600;font-size:14px;color:var(--text)">${t.n}</div><div style="font-size:13px;color:var(--text2);margin-top:2px">${t.u}</div></div><div style="font-size:12px;font-family:var(--mono);color:var(--green);flex-shrink:0;margin-left:12px">${t.c}</div></div>`).join('')}</div>
+    <div id="bd-bdpricing" style="display:none"><div class="card card-flush"><table class="tbl"><thead><tr><th>Package</th><th>Price</th><th>Includes</th><th>Est. Time</th></tr></thead><tbody>${b.pricing.map(p=>`<tr><td style="font-weight:600">${p.pkg}</td><td class="tbl-num">${p.p}</td><td style="font-size:13px;color:var(--text2)">${p.d}</td><td class="tbl-num">${p.t}</td></tr>`).join('')}</tbody></table></div><div class="info-bar orange" style="margin-top:12px">Monthly retainer: <strong>$150/mo</strong> — updates, backup, hosting management.</div></div>
+    <div id="bd-bdpitch" style="display:none">
+      <h3 style="margin-bottom:8px">Opening Pitch</h3>
+      <div class="script-box" style="margin-bottom:16px"><button class="copy-btn" onclick="copyEl(this,'bdp-${b.id}')">Copy</button><div id="bdp-${b.id}">${b.pitch}</div></div>
+      <div class="info-bar red"><strong>Watch out:</strong> ${b.gotcha}</div>
+    </div>`;
+  nav('biz-detail');
+}
+
+// ═══════════════════════════════════════════
+// PRICING CALCULATOR
+// ═══════════════════════════════════════════
+function calcPricing() {
+  const base=parseFloat(document.getElementById('pc-pkg').value)||300;
+  const exp=parseFloat(document.getElementById('pc-exp').value)||1;
+  const cli=parseFloat(document.getElementById('pc-client').value)||1;
+  const time=parseFloat(document.getElementById('pc-time').value)||1;
+  const tax=parseInt(document.getElementById('pc-tax').value)||25;
+  let addons=0;
+  document.querySelectorAll('#pc-addons input:checked').forEach(cb=>addons+=parseFloat(cb.value)||0);
+  document.getElementById('pc-tax-val').textContent=tax+'%';
+  const adjusted=Math.round(base*exp*cli)+addons;
+  const total=Math.round(adjusted*time);
+  const taxAmt=Math.round(total*(tax/100));
+  const hrs=base===300?'4–8':base===600?'8–14':'14–22';
+  const midHrs=base===300?6:base===600?11:18;
+  const rate=Math.round(total/midHrs);
+  const goal=parseFloat(document.getElementById('goal-input').value)||3000;
+  document.getElementById('pc-r-base').textContent='$'+base;
+  document.getElementById('pc-r-exp').textContent='×'+exp.toFixed(2);
+  document.getElementById('pc-r-client').textContent='×'+cli.toFixed(2);
+  document.getElementById('pc-r-addons').textContent='+$'+addons;
+  document.getElementById('pc-r-rush').textContent=time>1?'+'+Math.round((time-1)*100)+'%':'None';
+  document.getElementById('pc-r-tax').textContent='$'+taxAmt+' (set aside)';
+  document.getElementById('pc-total').textContent='$'+total.toLocaleString();
+  document.getElementById('pc-hours').textContent=hrs;
+  document.getElementById('pc-rate').textContent='$'+rate+'/hr';
+  document.getElementById('pc-to-goal').textContent=Math.ceil(goal/total);
+  window._lastQuote={total,base,exp,cli,time,addons,tax:taxAmt,hrs,rate};
+}
+
+function saveQuoteFromCalc() {
+  const q=window._lastQuote||{};
+  const pkg=document.getElementById('pc-pkg');
+  const label=pkg.options[pkg.selectedIndex].text;
+  saveQuote({label,total:q.total||0,hrs:q.hrs||'?',rate:q.rate||0,date:new Date().toLocaleDateString()});
+}
+
+function copyPricingQuote() {
+  const q=window._lastQuote||{};
+  navigator.clipboard.writeText(`KP Digital — Project Quote\nTotal: $${q.total||0}\nEst. Hours: ${q.hrs||'?'}\nEff. Rate: $${q.rate||0}/hr\nDate: ${new Date().toLocaleDateString()}`);
+}
+
+// ═══════════════════════════════════════════
+// SCENARIO BUILDER
+// ═══════════════════════════════════════════
+const SC={biz:null,pkg:null,pkgP:0,extras:{},cli:'Standard',cliP:1.0,time:1.0,timeLabel:'Standard'};
+function scPick(type,btn,label,val){
+  btn.parentElement.querySelectorAll('.sc-pill').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  SC[type]=label; SC[type+'P']=val;
+}
+function scPickTime(btn,label,val){
+  btn.parentElement.querySelectorAll('.sc-pill').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  SC.time=val; SC.timeLabel=label;
+}
+function scToggle(btn,label,price){
+  btn.classList.toggle('on');
+  if(btn.classList.contains('on')) SC.extras[label]=price;
+  else delete SC.extras[label];
+}
+function buildScenario(){
+  if(!SC.biz||!SC.pkg){alert('Select a business type and package first.');return;}
+  const extT=Object.values(SC.extras).reduce((a,b)=>a+b,0);
+  const sub=SC.pkgP+extT;
+  const total=Math.round(sub*SC.cliP*SC.time);
+  const floor=Math.round(total*0.85);
+  const target=total;
+  const rush=SC.time>1?Math.round(sub*(SC.time-1)):0;
+  const hrs=SC.pkgP===300?'4–7':SC.pkgP===600?'9–13':'16–22';
+  const extStr=Object.entries(SC.extras).map(([k,v])=>`${k}: +$${v}`).join(', ')||'None';
+  document.getElementById('sc-result').innerHTML=`
+    <div style="margin-bottom:14px;font-size:13px;font-weight:600;color:var(--text)">${SC.biz} — ${SC.pkg}</div>
+    <div class="result-row"><span class="result-label">Package base</span><span class="result-val">$${SC.pkgP}</span></div>
+    <div class="result-row"><span class="result-label">Add-ons</span><span class="result-val">${extStr}</span></div>
+    <div class="result-row"><span class="result-label">Add-ons total</span><span class="result-val">+$${extT}</span></div>
+    <div class="result-row"><span class="result-label">Client type</span><span class="result-val">${SC.cli} (×${SC.cliP})</span></div>
+    <div class="result-row"><span class="result-label">Timeline</span><span class="result-val">${SC.timeLabel}</span></div>
+    ${rush>0?`<div class="result-row"><span class="result-label">Rush fee</span><span class="result-val" style="color:var(--red)">+$${rush}</span></div>`:''}
+    <div class="result-row"><span class="result-label">Est. hours</span><span class="result-val">${hrs} hrs</span></div>
+    <div class="result-total"><span class="result-total-label">Quote</span><span class="result-total-val">$${total.toLocaleString()}</span></div>
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="padding:10px 12px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg2)">
+        <div style="font-size:10px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Floor Price</div>
+        <div style="font-family:var(--mono);font-size:18px;color:var(--yellow)">$${floor.toLocaleString()}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">Never go below this</div>
+      </div>
+      <div style="padding:10px 12px;border:1px solid var(--border);border-radius:var(--r);background:var(--bg2)">
+        <div style="font-size:10px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Target Price</div>
+        <div style="font-family:var(--mono);font-size:18px;color:var(--green)">$${target.toLocaleString()}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px">Lead with this</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button class="btn btn-primary btn-sm" onclick="saveQuote({label:'${SC.biz} — ${SC.pkg}',total:${total},hrs:'${hrs}',rate:Math.round(${total}/10),date:new Date().toLocaleDateString()})">Save Quote</button>
+      <button class="btn btn-ghost btn-sm" onclick="navigator.clipboard.writeText('KP Digital\\n${SC.biz} — ${SC.pkg}\\nTotal: $${total}\\nHours: ${hrs}')">Copy</button>
+    </div>`;
+}
+function resetScenario(){
+  Object.assign(SC,{biz:null,pkg:null,pkgP:0,extras:{},cli:'Standard',cliP:1.0,time:1.0,timeLabel:'Standard'});
+  document.querySelectorAll('.sc-pill').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('#sc-cli .sc-pill').forEach((p,i)=>{if(i===1)p.classList.add('on');});
+  document.querySelectorAll('#sc-time .sc-pill').forEach((p,i)=>{if(i===0)p.classList.add('on');});
+  document.getElementById('sc-result').innerHTML='<div style="text-align:center;padding:30px 0;color:var(--text3);font-size:13px">Select options and click Calculate</div>';
+}
+
+// ═══════════════════════════════════════════
+// ROI
+// ═══════════════════════════════════════════
+function calcROI(){
+  const val=parseFloat(document.getElementById('roi-val').value)||0;
+  const cust=parseFloat(document.getElementById('roi-cust').value)||0;
+  const cost=parseFloat(document.getElementById('roi-cost').value)||0;
+  const ret=parseFloat(document.getElementById('roi-ret').value)||0;
+  const monthly=val*cust;
+  const pb=monthly>0?Math.ceil(cost/monthly):'∞';
+  const annual=monthly*12-cost+(ret*12);
+  const yr2=(monthly+ret)*12;
+  document.getElementById('roi-monthly').textContent='$'+monthly.toLocaleString();
+  document.getElementById('roi-payback').textContent=typeof pb==='number'?pb+(pb===1?' month':' months'):'∞';
+  document.getElementById('roi-annual').textContent='$'+annual.toLocaleString();
+  document.getElementById('roi-yr2').textContent='$'+yr2.toLocaleString();
+  const verdict=typeof pb==='number'&&pb<=1?`Site pays for itself in ${pb} month — every customer after that is pure profit.`:typeof pb==='number'?`At ${cust} customers/mo the site pays back in ${pb} months.`:'Enter estimated customers to see payback.';
+  document.getElementById('roi-verdict').textContent=verdict;
+  document.getElementById('roi-pitch').innerHTML=`"Think about it this way — your average customer is worth $${val.toLocaleString()} to you. If your website brings in just ${cust} new customers a month, that's $${monthly.toLocaleString()}/month in new revenue. Your site pays for itself in ${typeof pb==='number'?pb+(pb===1?' month':' months'):'very little time'}. After that, every customer it brings in is pure profit — and the site keeps working for you 24/7 whether you're on the tools or not."`;
+}
+
+// ═══════════════════════════════════════════
+// INCOME ENGINE
+// ═══════════════════════════════════════════
+function calcIncome(){
+  const goal=parseFloat(document.getElementById('ie-goal').value)||0;
+  const expAmt=parseFloat(document.getElementById('ie-exp').value)||0; // Reads actual expenses
+  const hrs=parseFloat(document.getElementById('ie-hrs').value)||20;   // Reads actual hours
+  const tax=parseInt(document.getElementById('ie-tax').value)||25;
+  const expLvl=parseFloat(document.getElementById('ie-exp-lvl').value)||1;
+  const job=parseFloat(document.getElementById('ie-job').value)||0;
+  
+  document.getElementById('ie-hrs-val').textContent=hrs+' hrs';
+  document.getElementById('ie-tax-val').textContent=tax+'%';
+  
+  // Adjusted math: You must cover your expenses AND taxes to hit your take-home goal
+  const targetRevenue=(goal + expAmt) / (1-(tax/100)); 
+  const wks=4.33;
+  const billable=hrs*wks; // Uses hours, not expenses
+  const rate=billable>0?Math.ceil(targetRevenue/billable):0;
+  const adjRate=Math.round(rate*expLvl);
+  // ... leave the rest of the function as it is ...
+  const std=Math.round(600*expLvl);
+  const starter=Math.round(300*expLvl);
+  const prem=Math.round(1000*expLvl);
+  const projStd=Math.ceil(goal/std);
+  const retNeeded=job>0?Math.ceil((job/12)/150):null;
+  const monthsToJob=job>0?Math.ceil((job/12)/goal)*12:null;
+  document.getElementById('ie-rate').textContent='$'+adjRate+'/hr';
+  document.getElementById('ie-projects').textContent=projStd;
+  document.getElementById('ie-ret-job').textContent=retNeeded?retNeeded+'×':'—';
+  document.getElementById('ie-months-job').textContent=monthsToJob?monthsToJob+' mo':'—';
+  document.getElementById('ie-pkg-table').innerHTML=`
+    <tr><td>Starter</td><td class="tbl-num">$${starter}</td><td class="tbl-num">${Math.ceil(goal/starter)}</td><td class="tbl-num">${Math.ceil(goal/starter)*6}–${Math.ceil(goal/starter)*8} hrs</td></tr>
+    <tr><td>Standard</td><td class="tbl-num">$${std}</td><td class="tbl-num">${Math.ceil(goal/std)}</td><td class="tbl-num">${Math.ceil(goal/std)*9}–${Math.ceil(goal/std)*13} hrs</td></tr>
+    <tr><td>Premium</td><td class="tbl-num">$${prem}</td><td class="tbl-num">${Math.ceil(goal/prem)}</td><td class="tbl-num">${Math.ceil(goal/prem)*16}–${Math.ceil(goal/prem)*22} hrs</td></tr>
+    <tr><td>Retainer only</td><td class="tbl-num">$150/mo</td><td class="tbl-num">${Math.ceil(goal/150)} clients</td><td class="tbl-num">Ongoing</td></tr>`;
+  // Health score
+  const score=Math.min(100,Math.round((adjRate/50)*40+(goal<5000?30:20)+(expLvl>1.2?30:15)));
+  document.getElementById('health-num').textContent=score;
+  const arc=document.getElementById('health-arc');
+  arc.style.strokeDashoffset=314-(314*(score/100));
+  arc.style.stroke=score>=70?'var(--green)':score>=40?'var(--yellow)':'var(--red)';
+  document.getElementById('health-verdict').innerHTML=score>=70?'Pricing is sustainable. You can hit your goal without overworking.':score>=40?'Close — you may need more projects per month or slightly higher rates.':'Your current pricing puts you at risk of burnout. Raise your rates.';
+  document.getElementById('health-items').innerHTML=`
+    <div class="health-item"><span>Target hourly rate</span><span class="badge badge-${adjRate>=50?'green':'yellow'}">$${adjRate}/hr</span></div>
+    <div class="health-item"><span>Projects to hit goal (Standard)</span><span class="badge badge-${projStd<=4?'green':'yellow'}">${projStd}/mo</span></div>
+    <div class="health-item"><span>Experience multiplier</span><span class="badge badge-blue">×${expLvl.toFixed(2)}</span></div>
+    <div class="health-item"><span>Tax buffer</span><span class="badge badge-orange">${tax}%</span></div>`;
+  // 12mo chart
+  drawChart('income-chart', Array.from({length:12},(_,i)=>Math.round(goal*(1+i*0.07))), ['J','F','M','A','M','J','J','A','S','O','N','D']);
+}
+
+// ═══════════════════════════════════════════
+// PROFIT TRACKER
+// ═══════════════════════════════════════════
+function calcProfit(){
+  const qty=parseFloat(document.getElementById('pt-qty').value)||0;
+  const avg=parseFloat(document.getElementById('pt-avg').value)||0;
+  const ret=parseFloat(document.getElementById('pt-ret').value)||0;
+  const costs=parseFloat(document.getElementById('pt-costs').value)||0;
+  const hrs=parseFloat(document.getElementById('pt-hrs').value)||1;
+  const tax=parseInt(document.getElementById('pt-tax').value)||25;
+  document.getElementById('pt-tax-val').textContent=tax+'%';
+  const gross=qty*avg+ret;
+  const taxAmt=Math.round(gross*(tax/100));
+  const net=gross-costs-taxAmt;
+  const hourly=hrs>0?Math.round(net/hrs):0;
+  document.getElementById('pt-gross').textContent='$'+gross.toLocaleString();
+  document.getElementById('pt-tax-amt').textContent='$'+taxAmt.toLocaleString();
+  document.getElementById('pt-net').textContent='$'+net.toLocaleString();
+  document.getElementById('pt-hourly').textContent='$'+hourly+'/hr';
+}
+
+// ═══════════════════════════════════════════
+// INVOICE
+// ═══════════════════════════════════════════
+function buildInvoice(){
+  document.getElementById('inv-d-client').textContent=document.getElementById('inv-client').value||'—';
+  document.getElementById('inv-d-date').textContent=document.getElementById('inv-date').value||'—';
+  document.getElementById('inv-d-due').textContent=document.getElementById('inv-due').value||'—';
+  document.getElementById('inv-d-num').textContent=document.getElementById('inv-num').value||'INV-001';
+  const notes=document.getElementById('inv-notes').value;
+  document.getElementById('inv-d-notes').textContent=notes;
+  const descs=document.querySelectorAll('.inv-desc');
+  const amts=document.querySelectorAll('.inv-amt');
+  let total=0,rows='';
+  descs.forEach((d,i)=>{
+    const amt=parseFloat(amts[i].value)||0;
+    if(d.value||amt>0){total+=amt;rows+=`<div class="inv-row"><span>${d.value||'Item'}</span><span style="font-family:var(--mono)">$${amt.toFixed(2)}</span></div>`;}
+  });
+  document.getElementById('inv-d-rows').innerHTML=rows||'<div class="inv-row"><span style="color:var(--text3)">Add line items above...</span><span>—</span></div>';
+  document.getElementById('inv-d-total').textContent='$'+total.toFixed(2);
+}
+function addInvLine(){
+  const c=document.getElementById('inv-items');
+  const d=document.createElement('div');
+  d.style.cssText='display:grid;grid-template-columns:1fr 90px;gap:8px;margin-bottom:10px;align-items:center';
+  d.innerHTML='<input type="text" class="inv-desc" placeholder="Additional service" oninput="buildInvoice()"><input type="number" class="inv-amt" placeholder="0" oninput="buildInvoice()">';
+  c.appendChild(d);
+}
+
+// ═══════════════════════════════════════════
+// PROPOSAL
+// ═══════════════════════════════════════════
+function buildProposal(){
+  const biz=document.getElementById('pr-biz').value||'[Business Name]';
+  const name=document.getElementById('pr-name').value||'[Name]';
+  const niche=document.getElementById('pr-niche').value;
+  const pkg=document.getElementById('pr-pkg').value;
+  const features=document.getElementById('pr-features').value||'a professional website';
+  const delivery=document.getElementById('pr-delivery').value||'7–10 business days';
+  const you=document.getElementById('pr-you').value||'KP';
+  document.getElementById('proposal-text').textContent=`Hi ${name},
+
+I checked out ${biz} online and I think a professional website could make a real difference for you.
+
+I specialize in building websites for local ${niche} businesses — clean, fast, and built to bring in leads and bookings. Based on what you do, I'd recommend my ${pkg} package.
+
+What's included:
+— ${features}
+— Mobile-optimized and professional design
+— Fully tested before launch
+— 2 rounds of revisions included
+
+Timeline: ${delivery}
+I ask for 50% upfront to get started, 50% on launch day.
+
+I've worked with businesses just like yours and the results speak for themselves. Happy to show you examples or answer any questions.
+
+Want to set up a quick call this week?
+
+— ${you}, KP Digital`;
+  // Questionnaire
+  const qs={
+    'HVAC':['What services do you offer? (AC, heating, duct cleaning, etc.)','What areas do you cover?','Do you have a logo? Brand colors?','Do you want customers to call, fill a form, or both?','Do you have photos of your work or team?'],
+    'Hair Salon':['How many stylists work at your salon?','What services do you offer and at what price range?','Do you have a preferred booking system? (Calendly, Booksy, etc.)','Do you have photos of your work (before/after, styles)?','Do you sell retail products or gift cards?'],
+    'Barber Shop':['How many barbers are in the shop?','What are your main services and prices?','Do you take walk-ins, appointments, or both?','What's the vibe you want for the site? (clean, bold, barbershop classic?)','Do you have any photos of your shop or work?'],
+    'Cleaning Business':['What type of cleaning do you offer? (residential, commercial, deep clean?)','What areas do you service?','What makes you different from other cleaners in the area?','Do you have photos of before/after jobs?','Do you have any client reviews I can feature?'],
+    'Mechanic Shop':['What are your main services? (brakes, AC, engine, tires, etc.)','Are you ASE certified or have any other credentials?','Do you take walk-ins, appointments, or both?','What's your average turnaround time on jobs?','Do you have photos of your shop or team?'],
+    'Restaurant':['What type of cuisine do you serve?','Do you have an existing menu I can use? PDF is fine.','Do you take reservations? If so, how?','Do you want online ordering or just a digital menu?','Do you have professional food photos or can you get some?'],
+    'Nail Salon':['What services do you offer? (gel, acrylic, nail art, pedicures?)','Do you have individual nail techs to profile?','What booking system do you use or want to use?','Do you have photos of your work (nail styles, shop interior)?','Do you have a cancellation or no-show policy?'],
+    'Landscaping':['What services do you offer? (mowing, design, hardscape, etc.)','What areas do you service?','Do you have before/after photos of jobs?','Do you want customers to request quotes online?','Do you run any seasonal promotions?'],
+    'Personal Trainer':['Do you train in-person, online, or both?','What packages or programs do you offer?','Do you have transformation photos from past clients (with their permission)?','What booking or scheduling system do you want to use?','Do you have professional photos of yourself?'],
+  };
+  const q=qs[niche]||qs['HVAC'];
+  document.getElementById('questionnaire').innerHTML=`Questions for ${name} at ${biz}:\n\n${q.map((x,i)=>`${i+1}. ${x}`).join('\n')}`;
+}
+
+// ═══════════════════════════════════════════
+// SCOPE CREEP
+// ═══════════════════════════════════════════
+const scopeItems=[];
+function addScopeItem(){
+  const proj=document.getElementById('sc-proj').value.trim();
+  const req=document.getElementById('sc-req').value.trim();
+  const hrs=parseFloat(document.getElementById('sc-hrs').value)||1;
+  const status=document.getElementById('sc-status').value;
+  if(!req){alert('Enter the request description.');return;}
+  scopeItems.push({proj:proj||'Unnamed',req,hrs,status,id:Date.now()});
+  renderScopeTable();
+  document.getElementById('sc-req').value='';
+  document.getElementById('sc-hrs').value='2';
+}
+function removeScopeItem(id){
+  const idx=scopeItems.findIndex(x=>x.id===id);
+  if(idx>-1)scopeItems.splice(idx,1);
+  renderScopeTable();
+}
+function renderScopeTable(){
+  const tbody=document.getElementById('scope-tbody');
+  const billable=scopeItems.filter(x=>x.status==='Pending — not yet charged');
+  const totalHrs=billable.reduce((a,b)=>a+b.hrs,0);
+  const totalAmt=totalHrs*75;
+  document.getElementById('sc-total-hrs').textContent=totalHrs.toFixed(1);
+  document.getElementById('sc-total-amt').textContent='$'+totalAmt.toLocaleString();
+  if(!scopeItems.length){tbody.innerHTML='<tr><td colspan="6" style="color:var(--text3);text-align:center;padding:20px">No requests logged yet.</td></tr>';return;}
+  tbody.innerHTML=scopeItems.map(item=>`
+    <tr>
+      <td>${item.proj}</td>
+      <td>${item.req}</td>
+      <td class="tbl-num">${item.hrs}</td>
+      <td class="tbl-num">${item.status==='Included — goodwill'?'—':'$'+(item.hrs*75).toLocaleString()}</td>
+      <td><span class="badge badge-${item.status==='Invoiced'?'green':item.status==='Included — goodwill'?'blue':'yellow'}">${item.status==='Pending — not yet charged'?'Pending':item.status==='Included — goodwill'?'Goodwill':'Invoiced'}</span></td>
+      <td><button class="btn btn-danger btn-xs" onclick="removeScopeItem(${item.id})">Remove</button></td>
+    </tr>`).join('');
+}
+
+// ═══════════════════════════════════════════
+// SAVED QUOTES
+// ═══════════════════════════════════════════
+function saveQuote(q){
+  const quotes=JSON.parse(localStorage.getItem('kp_quotes')||'[]');
+  quotes.push({...q,id:Date.now()});
+  localStorage.setItem('kp_quotes',JSON.stringify(quotes));
+  renderSavedQuotes();
+  alert('Quote saved!');
+}
+function clearQuotes(){
+  if(!confirm('Clear all saved quotes?'))return;
+  localStorage.removeItem('kp_quotes');
+  renderSavedQuotes();
+}
+function removeQuote(id){
+  const quotes=JSON.parse(localStorage.getItem('kp_quotes')||'[]').filter(q=>q.id!==id);
+  localStorage.setItem('kp_quotes',JSON.stringify(quotes));
+  renderSavedQuotes();
+}
+function renderSavedQuotes(){
+  const quotes=JSON.parse(localStorage.getItem('kp_quotes')||'[]');
+  document.getElementById('sq-count').textContent=quotes.length+' quote'+(quotes.length===1?'':'s')+' saved';
+  if(!quotes.length){document.getElementById('sq-list').innerHTML='<div style="color:var(--text3);font-size:13px;padding:20px 0">No saved quotes yet. Use the Pricing Calculator or Scenario Builder to save quotes.</div>';document.getElementById('sq-compare').innerHTML='';return;}
+  document.getElementById('sq-list').innerHTML=quotes.map(q=>`
+    <div class="saved-card">
+      <div>
+        <div class="saved-card-info" style="font-weight:600">${q.label||'Quote'}</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:2px">${q.date||''} · ${q.hrs||'?'} hrs · $${q.rate||0}/hr effective</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="saved-card-price">$${(q.total||0).toLocaleString()}</div>
+        <button class="btn btn-danger btn-xs" onclick="removeQuote(${q.id})">Remove</button>
+      </div>
+    </div>`).join('');
+  if(quotes.length>=2){
+    const recent=quotes.slice(-3);
+    document.getElementById('sq-compare').innerHTML=`
+      <h2>Side-by-Side Comparison</h2>
+      <div class="card card-flush"><table class="tbl">
+        <thead><tr><th>Quote</th><th>Total</th><th>Hours</th><th>Eff. Rate</th><th>Date</th></tr></thead>
+        <tbody>${recent.map(q=>`<tr><td style="font-weight:600">${q.label||'Quote'}</td><td class="tbl-num">$${(q.total||0).toLocaleString()}</td><td class="tbl-num">${q.hrs||'?'}</td><td class="tbl-num">$${q.rate||0}/hr</td><td class="tbl-muted">${q.date||'—'}</td></tr>`).join('')}</tbody>
+      </table></div>`;
+  } else document.getElementById('sq-compare').innerHTML='';
+}
+
+// ═══════════════════════════════════════════
+// CHART
+// ═══════════════════════════════════════════
+function drawChart(id, data, labels){
+  const el=document.getElementById(id);
+  if(!el)return;
+  const max=Math.max(...data,1);
+  el.innerHTML=data.map((v,i)=>`
+    <div class="chart-col">
+      <div class="chart-bar-wrap"><div class="chart-bar" style="height:${Math.round((v/max)*100)}%" title="$${v.toLocaleString()}"></div></div>
+      <div class="chart-label">${labels?labels[i]:i+1}</div>
+    </div>`).join('');
+}
+
+function drawDashChart(){
+  const goal=parseFloat(document.getElementById('goal-input').value)||3000;
+  drawChart('dash-chart',Array.from({length:12},(_,i)=>Math.round(goal*(1+i*0.08))),['J','F','M','A','M','J','J','A','S','O','N','D']);
+}
+
+// ═══════════════════════════════════════════
+// COPY HELPER
+// ═══════════════════════════════════════════
+function copyEl(btn,id){
+  const el=document.getElementById(id);
+  if(!el)return;
+  navigator.clipboard.writeText(el.innerText).then(()=>{
+    btn.textContent='Copied';btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('ok');},2000);
+  });
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+renderBizGrids();
+calcPricing();
+calcROI();
+calcIncome();
+calcProfit();
+buildProposal();
+renderSavedQuotes();
+
+// Dates
+const today=new Date();
+document.getElementById('inv-date').value=today.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+const due=new Date(today);due.setDate(due.getDate()+14);
+document.getElementById('inv-due').value=due.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+buildInvoice();
+updateDashGoal(3000);
+drawDashChart();
+</script>
+</body>
+</html>
