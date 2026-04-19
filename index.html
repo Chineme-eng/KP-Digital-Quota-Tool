@@ -1384,8 +1384,8 @@ function calcROI(){
 // ═══════════════════════════════════════════
 function calcIncome(){
   const goal=parseFloat(document.getElementById('ie-goal').value)||0;
-  const expAmt=parseFloat(document.getElementById('ie-exp').value)||0; // Reads actual expenses
-  const hrs=parseFloat(document.getElementById('ie-hrs').value)||20;   // Reads actual hours
+  const expAmt=parseFloat(document.getElementById('ie-exp').value)||0;
+  const hrs=parseFloat(document.getElementById('ie-hrs').value)||20;
   const tax=parseInt(document.getElementById('ie-tax').value)||25;
   const expLvl=parseFloat(document.getElementById('ie-exp-lvl').value)||1;
   const job=parseFloat(document.getElementById('ie-job').value)||0;
@@ -1393,13 +1393,11 @@ function calcIncome(){
   document.getElementById('ie-hrs-val').textContent=hrs+' hrs';
   document.getElementById('ie-tax-val').textContent=tax+'%';
   
-  // Adjusted math: You must cover your expenses AND taxes to hit your take-home goal
-  const targetRevenue=(goal + expAmt) / (1-(tax/100)); 
+  const targetRevenue=(goal + expAmt) / (1-(tax/100));
   const wks=4.33;
-  const billable=hrs*wks; // Uses hours, not expenses
+  const billable=hrs*wks;
   const rate=billable>0?Math.ceil(targetRevenue/billable):0;
   const adjRate=Math.round(rate*expLvl);
-  // ... leave the rest of the function as it is ...
   const std=Math.round(600*expLvl);
   const starter=Math.round(300*expLvl);
   const prem=Math.round(1000*expLvl);
