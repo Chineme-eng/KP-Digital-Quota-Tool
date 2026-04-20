@@ -836,10 +836,11 @@ footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border);text-
   </div>
 
   <!-- WORKFLOW -->
-  <div id="ref-workflow">
+<div id="ref-workflow">
     <div class="inner-tabs" style="margin-top:0">
       <button class="inner-tab active" onclick="switchInner('wf','process',this)">Process</button>
       <button class="inner-tab" onclick="switchInner('wf','toolstack',this)">Tool Stack</button>
+      <button class="inner-tab" onclick="switchInner('wf','toolsconnect',this)">How Tools Connect</button>
       <button class="inner-tab" onclick="switchInner('wf','timeline',this)">Timeline</button>
       <button class="inner-tab" onclick="switchInner('wf','handoff',this)">Handoff</button>
     </div>
@@ -871,6 +872,50 @@ footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border);text-
           <tr><td><strong>Google Analytics</strong></td><td>Track site traffic — clients love seeing their numbers</td><td class="tbl-green">Free</td></tr>
         </tbody>
       </table></div>
+    </div>
+    <div id="wf-toolsconnect" style="display:none">
+      <div class="panel">
+        <div style="padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="font-family:var(--serif);font-size:16px;font-weight:500;color:var(--text);margin-bottom:4px">Canva</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:6px">Design logos, page mockups, social graphics, and client proposals before you build anything.</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500">Cost: Free (Pro optional at $15/mo)</div>
+        </div>
+        <div style="padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="font-family:var(--serif);font-size:16px;font-weight:500;color:var(--text);margin-bottom:4px">Webflow</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:6px">Build the full website visually. Free tier hosts on .webflow.io — client connects their own domain when ready.</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500">Cost: Free tier · Paid from $14/mo (client pays this)</div>
+        </div>
+        <div style="padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="font-family:var(--serif);font-size:16px;font-weight:500;color:var(--text);margin-bottom:4px">GitHub + GitHub Pages</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:6px">Free hosting for hand-coded HTML/CSS/JS sites. Great for clients who want cheap long-term hosting.</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500">Cost: 100% Free forever</div>
+        </div>
+        <div style="padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="font-family:var(--serif);font-size:16px;font-weight:500;color:var(--text);margin-bottom:4px">Calendly</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:6px">Embed a free booking widget into any site. Client connects their Google Calendar. Works in Webflow, HTML, or WordPress.</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500">Cost: Free tier</div>
+        </div>
+        <div style="padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="font-family:var(--serif);font-size:16px;font-weight:500;color:var(--text);margin-bottom:4px">Formspree</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:6px">Turn any HTML contact form into a working email form. No backend or code needed — just paste their snippet.</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500">Cost: Free up to 50 submissions/mo</div>
+        </div>
+        <div style="padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="font-family:var(--serif);font-size:16px;font-weight:500;color:var(--text);margin-bottom:4px">Tawk.to</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:6px">Free live chat widget. Copy/paste a script tag into the site. Client manages chats from their phone app.</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500">Cost: 100% Free</div>
+        </div>
+        <div style="padding:12px 0;border-bottom:1px solid var(--border)">
+          <div style="font-family:var(--serif);font-size:16px;font-weight:500;color:var(--text);margin-bottom:4px">Claude / ChatGPT</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:6px">Write website copy (About, Services, FAQs), generate code snippets, debug errors, write client emails.</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500">Cost: Free tiers available on both</div>
+        </div>
+        <div style="padding:12px 0">
+          <div style="font-family:var(--serif);font-size:16px;font-weight:500;color:var(--text);margin-bottom:4px">Loom</div>
+          <div style="font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:6px">Record a short screen walkthrough video for the client so they know how to manage their site after you deliver it.</div>
+          <div style="font-family:var(--mono);font-size:11px;color:var(--green);font-weight:500">Cost: Free tier</div>
+        </div>
+      </div>
     </div>
     <div id="wf-timeline" style="display:none">
       <div class="panel"><div class="tl">
@@ -968,6 +1013,22 @@ footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border);text-
         <tr><td><strong>Squarespace</strong></td><td>Quick restaurant or portfolio sites</td><td class="tbl-accent">$16/mo client</td><td><span class="badge badge-green">Easy</span></td></tr>
       </tbody></table>
     </div>
+     <div class="panel mb16"><div class="sec-hdr"><span class="sec-title">Design Tools</span></div>
+      <table class="tbl"><thead><tr><th>Tool</th><th>What it does</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Canva</strong></td><td>Logos, page mockups, social graphics, client proposals</td><td class="tbl-green">Free (Pro $15/mo)</td></tr>
+        <tr><td><strong>Adobe Express</strong></td><td>Quick social graphics and logo edits</td><td class="tbl-green">Free tier</td></tr>
+        <tr><td><strong>Figma</strong></td><td>Detailed wireframes — optional, more advanced</td><td class="tbl-green">Free tier</td></tr>
+      </tbody></table>
+    </div>
+    <div class="panel mb16"><div class="sec-hdr"><span class="sec-title">AI Tools</span></div>
+      <table class="tbl"><thead><tr><th>Tool</th><th>What it does</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Claude</strong></td><td>Write copy, fix code, answer questions, generate content</td><td class="tbl-green">Free (Pro $20/mo)</td></tr>
+        <tr><td><strong>ChatGPT</strong></td><td>Write copy, brainstorm ideas, generate content</td><td class="tbl-green">Free tier</td></tr>
+        <tr><td><strong>Gemini</strong></td><td>Google Docs and Drive integration, content generation</td><td class="tbl-green">Free</td></tr>
+      </tbody></table>
+    </div>
     <div class="panel mb16"><div class="sec-hdr"><span class="sec-title">Free Integrations</span></div>
       <table class="tbl"><thead><tr><th>Tool</th><th>What it does</th><th>Cost</th></tr></thead>
       <tbody>
@@ -977,8 +1038,6 @@ footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border);text-
         <tr><td><strong>Google Maps Embed</strong></td><td>Map on site via iframe — copy/paste</td><td class="tbl-green">Free</td></tr>
         <tr><td><strong>Google Analytics</strong></td><td>Track site visitors — show clients their traffic</td><td class="tbl-green">Free</td></tr>
         <tr><td><strong>Mailchimp</strong></td><td>Email newsletter signup form</td><td class="tbl-green">Free ≤500 contacts</td></tr>
-        <tr><td><strong>Canva</strong></td><td>Logos, mockups, social graphics, proposals</td><td class="tbl-green">Free</td></tr>
-        <tr><td><strong>Claude / ChatGPT</strong></td><td>Write all copy, fix code, generate content</td><td class="tbl-green">Free tiers</td></tr>
         <tr><td><strong>Loom</strong></td><td>Screen recording for client handoff walkthroughs</td><td class="tbl-green">Free tier</td></tr>
       </tbody></table>
     </div>
