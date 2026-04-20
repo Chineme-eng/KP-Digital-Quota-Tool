@@ -148,7 +148,7 @@ input[type=checkbox]{accent-color:var(--accent);width:14px;height:14px;cursor:po
 .badge-blue{background:var(--blue-bg);color:var(--blue)}
 
 /* ── BIZ CARDS ── */
-.biz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:2rem}
+.biz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:2rem}
 @media(max-width:700px){.biz-grid{grid-template-columns:1fr 1fr}}
 .biz-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);padding:16px;cursor:pointer;transition:all .18s;box-shadow:var(--shadow)}
 .biz-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow2)}
@@ -226,7 +226,7 @@ input[type=checkbox]{accent-color:var(--accent);width:14px;height:14px;cursor:po
 .tl-desc{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5}
 
 /* ── SAVED QUOTES ── */
-.saved-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 18px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
+.saved-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow)}
 .saved-card-left{font-family:var(--mono)}
 .saved-card-name{font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px}
 .saved-card-meta{font-size:10px;color:var(--muted)}
@@ -391,18 +391,18 @@ footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border);text-
         </div>
       </div>
     </div>
-    <div class="panel">
+   <div class="panel">
       <div class="panel-hdr"><span class="panel-label">Add-ons</span></div>
-      <div style="display:flex;flex-direction:column;gap:8px" id="pc-addons">
-        <label style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted);cursor:pointer"><input type="checkbox" value="75" onchange="calcPrice()"> Online Booking — +$75</label>
-        <label style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted);cursor:pointer"><input type="checkbox" value="100" onchange="calcPrice()"> E-commerce Store — +$100</label>
-        <label style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted);cursor:pointer"><input type="checkbox" value="50" onchange="calcPrice()"> Google Maps — +$50</label>
-        <label style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted);cursor:pointer"><input type="checkbox" value="50" onchange="calcPrice()"> Photo Gallery — +$50</label>
-        <label style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted);cursor:pointer"><input type="checkbox" value="80" onchange="calcPrice()"> Blog Section — +$80</label>
-        <label style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted);cursor:pointer"><input type="checkbox" value="120" onchange="calcPrice()"> Live Chat — +$120</label>
-        <label style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted);cursor:pointer"><input type="checkbox" value="150" onchange="calcPrice()"> SEO Setup — +$150</label>
-        <label style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted);cursor:pointer"><input type="checkbox" value="200" onchange="calcPrice()"> Logo Design — +$200</label>
-      </div>
+      <ul class="check-list" id="pc-addons" style="margin-top: -8px;">
+        <li class="check-item"><input type="checkbox" id="add1" value="75" onchange="calcPrice()"><label for="add1">Online Booking — +$75</label></li>
+        <li class="check-item"><input type="checkbox" id="add2" value="100" onchange="calcPrice()"><label for="add2">E-commerce Store — +$100</label></li>
+        <li class="check-item"><input type="checkbox" id="add3" value="50" onchange="calcPrice()"><label for="add3">Google Maps — +$50</label></li>
+        <li class="check-item"><input type="checkbox" id="add4" value="50" onchange="calcPrice()"><label for="add4">Photo Gallery — +$50</label></li>
+        <li class="check-item"><input type="checkbox" id="add5" value="80" onchange="calcPrice()"><label for="add5">Blog Section — +$80</label></li>
+        <li class="check-item"><input type="checkbox" id="add6" value="120" onchange="calcPrice()"><label for="add6">Live Chat — +$120</label></li>
+        <li class="check-item"><input type="checkbox" id="add7" value="150" onchange="calcPrice()"><label for="add7">SEO Setup — +$150</label></li>
+        <li class="check-item"><input type="checkbox" id="add8" value="200" onchange="calcPrice()"><label for="add8">Logo Design — +$200</label></li>
+      </ul>
     </div>
     <div class="panel">
       <div class="panel-hdr"><span class="panel-label">Feature time &amp; price reference</span></div>
@@ -692,15 +692,11 @@ footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border);text-
         <div class="field"><label>Estimated delivery</label><input class="fi" id="pr-delivery" placeholder="7–10 business days" oninput="buildProposal()"></div>
         <div class="field"><label>Your name</label><input class="fi" id="pr-you" value="KP" oninput="buildProposal()"></div>
       </div>
-      <div>
-        <div class="panel mb16">
-          <div class="panel-hdr"><span class="panel-label">Proposal message</span><button class="cbtn" onclick="copyEl(this,'proposal-out')">Copy</button></div>
-          <div id="proposal-out" style="font-family:var(--mono);font-size:12px;line-height:1.8;color:var(--text);white-space:pre-line"></div>
-        </div>
-        <div class="panel">
-          <div class="panel-hdr"><span class="panel-label">Client questionnaire</span><button class="cbtn" onclick="copyEl(this,'questionnaire-out')">Copy</button></div>
-          <div id="questionnaire-out" style="font-family:var(--mono);font-size:11px;line-height:1.8;color:var(--muted);white-space:pre-line"></div>
-        </div>
+       <div>
+        <p class="panel-label mb8" style="display:flex; justify-content:space-between; align-items:center;">Proposal message <button class="cbtn" onclick="copyEl(this,'proposal-out')">Copy</button></p>
+        <div class="script-box" id="proposal-out" style="white-space:pre-line; font-size:13px;"></div>
+        <p class="panel-label mb8" style="display:flex; justify-content:space-between; align-items:center; margin-top:24px;">Client questionnaire <button class="cbtn" onclick="copyEl(this,'questionnaire-out')">Copy</button></p>
+        <div class="script-box" id="questionnaire-out" style="white-space:pre-line; font-size:13px; color:var(--muted);"></div>
       </div>
     </div>
   </div>
