@@ -173,9 +173,10 @@ input[type=checkbox]{accent-color:var(--accent);width:14px;height:14px;cursor:po
 
 /* ── CHECKLIST (Onboarding & Handoff) ── */
 .check-list { list-style: none; }
-.check-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.check-item { display: flex; align-items: flex-start; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
 .check-item:last-child { border-bottom: none; }
-.check-item label { cursor: pointer; color: var(--text); font-family: var(--mono); font-size: 13px; line-height: 1.6; }
+.check-item label { cursor: pointer; color: var(--text); font-family: var(--mono); font-size: 14px; line-height: 1.6; transition: all 0.2s ease; }
+.check-item input[type="checkbox"]:checked + label { text-decoration: line-through; color: var(--faint); }
 
 /* ── TABLE ROWS (Calculator, Scope Creep, All Tools) ── */
 .tbl th { padding: 12px 16px; text-align: left; font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); border-bottom: 1px solid var(--border); font-weight: 500; }
@@ -692,11 +693,11 @@ footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border);text-
         <div class="field"><label>Estimated delivery</label><input class="fi" id="pr-delivery" placeholder="7–10 business days" oninput="buildProposal()"></div>
         <div class="field"><label>Your name</label><input class="fi" id="pr-you" value="KP" oninput="buildProposal()"></div>
       </div>
-       <div>
-        <p class="panel-label mb8" style="display:flex; justify-content:space-between; align-items:center;">Proposal message <button class="cbtn" onclick="copyEl(this,'proposal-out')">Copy</button></p>
-        <div class="script-box" id="proposal-out" style="white-space:pre-line; font-size:13px;"></div>
-        <p class="panel-label mb8" style="display:flex; justify-content:space-between; align-items:center; margin-top:24px;">Client questionnaire <button class="cbtn" onclick="copyEl(this,'questionnaire-out')">Copy</button></p>
-        <div class="script-box" id="questionnaire-out" style="white-space:pre-line; font-size:13px; color:var(--muted);"></div>
+      <div>
+        <p class="panel-label mb8" style="display:flex; justify-content:space-between; align-items:center; font-size:13px;">Proposal message <button class="cbtn" onclick="copyEl(this,'proposal-out')">Copy</button></p>
+        <div class="script-box" id="proposal-out" style="white-space:pre-line; font-size:15px;"></div>
+        <p class="panel-label mb8" style="display:flex; justify-content:space-between; align-items:center; margin-top:24px; font-size:13px;">Client questionnaire <button class="cbtn" onclick="copyEl(this,'questionnaire-out')">Copy</button></p>
+        <div class="script-box" id="questionnaire-out" style="white-space:pre-line; font-size:15px; color:var(--muted);"></div>
       </div>
     </div>
   </div>
@@ -766,19 +767,19 @@ footer{margin-top:4rem;padding-top:2rem;border-top:1px solid var(--border);text-
     <div class="g2">
       <div class="panel">
         <div class="panel-hdr"><span class="panel-label">Assets to collect</span></div>
-        <ul class="check-list">
-          <li><input type="checkbox" id="oc1"><label for="oc1">Business name and tagline</label></li>
-          <li><input type="checkbox" id="oc2"><label for="oc2">Address and hours of operation</label></li>
-          <li><input type="checkbox" id="oc3"><label for="oc3">Phone number and email</label></li>
-          <li><input type="checkbox" id="oc4"><label for="oc4">Logo (PNG, transparent background)</label></li>
-          <li><input type="checkbox" id="oc5"><label for="oc5">Photos of business, work, or team</label></li>
-          <li><input type="checkbox" id="oc6"><label for="oc6">Brand colors (hex codes or visual examples)</label></li>
-          <li><input type="checkbox" id="oc7"><label for="oc7">Full list of services and prices</label></li>
-          <li><input type="checkbox" id="oc8"><label for="oc8">All social media links</label></li>
-          <li><input type="checkbox" id="oc9"><label for="oc9">Examples of sites they like</label></li>
-          <li><input type="checkbox" id="oc10"><label for="oc10">Do they have a domain already?</label></li>
-          <li><input type="checkbox" id="oc11"><label for="oc11">Any specific features requested</label></li>
-          <li><input type="checkbox" id="oc12"><label for="oc12">50% deposit received</label></li>
+      <ul class="check-list">
+          <li class="check-item"><input type="checkbox" id="oc1"><label for="oc1">Business name and tagline</label></li>
+          <li class="check-item"><input type="checkbox" id="oc2"><label for="oc2">Address and hours of operation</label></li>
+          <li class="check-item"><input type="checkbox" id="oc3"><label for="oc3">Phone number and email</label></li>
+          <li class="check-item"><input type="checkbox" id="oc4"><label for="oc4">Logo (PNG, transparent background)</label></li>
+          <li class="check-item"><input type="checkbox" id="oc5"><label for="oc5">Photos of business, work, or team</label></li>
+          <li class="check-item"><input type="checkbox" id="oc6"><label for="oc6">Brand colors (hex codes or visual examples)</label></li>
+          <li class="check-item"><input type="checkbox" id="oc7"><label for="oc7">Full list of services and prices</label></li>
+          <li class="check-item"><input type="checkbox" id="oc8"><label for="oc8">All social media links</label></li>
+          <li class="check-item"><input type="checkbox" id="oc9"><label for="oc9">Examples of sites they like</label></li>
+          <li class="check-item"><input type="checkbox" id="oc10"><label for="oc10">Do they have a domain already?</label></li>
+          <li class="check-item"><input type="checkbox" id="oc11"><label for="oc11">Any specific features requested</label></li>
+          <li class="check-item"><input type="checkbox" id="oc12"><label for="oc12">50% deposit received</label></li>
         </ul>
       </div>
       <div class="panel">
@@ -1312,8 +1313,9 @@ function calcIncome(){
     <div class="result-row"><span class="result-label">Projects/mo to hit goal</span><span class="badge badge-${projStd<=4?'green':'amber'}">${projStd}</span></div>
     <div class="result-row"><span class="result-label">Experience multiplier</span><span class="badge badge-blue">×${xp.toFixed(2)}</span></div>
     <div class="result-row"><span class="result-label">Tax buffer applied</span><span class="badge badge-accent">${tax}%</span></div>`;
-  // Chart
-  drawChart('ie-chart',Array.from({length:12},(_,i)=>Math.round(goal*(1+i*0.07))),['J','F','M','A','M','J','J','A','S','O','N','D']);
+ 
+  // Chart (Compounding growth)
+  drawChart('ie-chart',Array.from({length:12},(_,i)=>Math.round(goal*Math.pow(1.07, i))),['J','F','M','A','M','J','J','A','S','O','N','D']);
 }
 
 // ══════════════ PROFIT TRACKER ══════════════
@@ -1522,7 +1524,7 @@ function drawChart(id,data,labels){
 
 function drawDashChart(){
   const g=parseFloat(document.getElementById('goal-global').value)||3000;
-  drawChart('dash-chart',Array.from({length:12},(_,i)=>Math.round(g*(1+i*0.07))),['J','F','M','A','M','J','J','A','S','O','N','D']);
+  drawChart('dash-chart',Array.from({length:12},(_,i)=>Math.round(g*Math.pow(1.07, i))),['J','F','M','A','M','J','J','A','S','O','N','D']);
 }
 
 // ══════════════ COPY ══════════════
