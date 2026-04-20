@@ -98,10 +98,10 @@ h1 em{font-style:italic;color:var(--accent)}
 .bp-sub{font-family:var(--mono);font-size:12px;margin-top:8px;color:var(--muted);line-height:1.8}
 
 /* ── FORM ── */
-.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
 .field:last-child{margin-bottom:0}
 .field label,.field-label{font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-.fi{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:7px;padding:10px 12px;font-family:var(--mono);font-size:14px;color:var(--text);outline:none;transition:border-color .15s}
+.fi { width: 100%; background: var(--bg2); border: 1px solid var(--border); border-radius: 7px; padding: 12px 14px; font-family: var(--mono); font-size: 14px; color: var(--text); outline: none; transition: border-color .15s; }
 .fi:focus{border-color:var(--accent)}
 select.fi option{background:var(--bg2)}
 textarea.fi{min-height:90px;resize:vertical;font-family:var(--mono);font-size:13px;line-height:1.6}
@@ -163,24 +163,29 @@ input[type=checkbox]{accent-color:var(--accent);width:14px;height:14px;cursor:po
 .inner-tab:hover{color:var(--text)}
 .inner-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 
-/* ── STEP LIST ── */
-.step-list{list-style:none}
-.step-item{display:flex;gap:14px;padding:13px 0;border-bottom:1px solid var(--border)}
-.step-item:last-child{border-bottom:none}
-.step-num{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;font-family:var(--mono)}
-.step-body strong{font-family:var(--serif);font-size:15px;font-weight:400;color:var(--text);display:block}
-.step-body span{font-family:var(--mono);font-size:11px;color:var(--muted);display:block;margin-top:2px;line-height:1.5}
+/* ── STEP LIST (Numbered items) ── */
+.step-list { list-style: none; }
+.step-item { display: flex; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+.step-item:last-child { border-bottom: none; }
+.step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: #fff; font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; font-family: var(--mono); }
+.step-body strong { font-family: var(--serif); font-size: 16px; font-weight: 500; color: var(--text); display: block; }
+.step-body span { font-family: var(--mono); font-size: 12px; color: var(--muted); display: block; margin-top: 6px; line-height: 1.6; }
 
-/* ── CHECKLIST ── */
-.check-list{list-style:none}
-.check-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:14px}
-.check-item:last-child{border-bottom:none}
-.check-item label{cursor:pointer;color:var(--text);font-family:var(--mono);font-size:12px;line-height:1.5}
-.check-item input:checked+label{text-decoration:line-through;color:var(--muted)}
+/* ── CHECKLIST (Onboarding & Handoff) ── */
+.check-list { list-style: none; }
+.check-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+.check-item:last-child { border-bottom: none; }
+.check-item label { cursor: pointer; color: var(--text); font-family: var(--mono); font-size: 13px; line-height: 1.6; }
 
-/* ── SCRIPT BOX ── */
-.script-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:16px;font-size:14px;line-height:1.75;color:var(--text);position:relative;margin-bottom:12px}
-.script-box .cbtn{position:absolute;top:10px;right:10px}
+/* ── TABLE ROWS (Calculator, Scope Creep, All Tools) ── */
+.tbl th { padding: 12px 16px; text-align: left; font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); border-bottom: 1px solid var(--border); font-weight: 500; }
+.tbl td { padding: 16px 16px; border-bottom: 1px solid var(--border); color: var(--text); font-family: var(--mono); font-size: 13px; vertical-align: middle; line-height: 1.5; }
+.scope-tbl th { padding: 12px 16px; text-align: left; font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); border-bottom: 1px solid var(--border); font-weight: 500; }
+.scope-tbl td { padding: 16px 16px; border-bottom: 1px solid var(--border); font-family: var(--mono); font-size: 12px; color: var(--text); vertical-align: middle; }
+
+/* ── SCRIPT BOXES & INFO BARS (Reference & Sales Scripts) ── */
+.script-box { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; font-size: 15px; line-height: 1.8; color: var(--text); position: relative; margin-bottom: 20px; }
+.info-bar { padding: 16px 20px; border-radius: var(--r); font-family: var(--mono); font-size: 13px; border-left: 4px solid; margin-bottom: 16px; line-height: 1.7; }
 
 /* ── COPY BTN ── */
 .cbtn{font-family:var(--mono);font-size:10px;padding:5px 10px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;transition:all .15s}
@@ -196,7 +201,8 @@ input[type=checkbox]{accent-color:var(--accent);width:14px;height:14px;cursor:po
 .info-bar strong{color:var(--text)}
 
 /* ── RED FLAGS ── */
-.flag-item{display:flex;gap:10px;align-items:flex-start;padding:10px 13px;border-radius:var(--r);background:var(--red-bg);border:1px solid var(--red);font-family:var(--mono);font-size:11px;color:var(--red);line-height:1.6;margin-bottom:8px}
+.flag-item { display: flex; gap: 14px; align-items: flex-start; padding: 18px 22px; border-radius: var(--r); background: var(--red-bg); border: 1px solid var(--red); font-family: var(--mono); font-size: 12px; color: var(--red); line-height: 1.7; margin-bottom: 16px; }
+.flag-item strong { font-family: var(--serif); font-size: 16px; font-weight: 500; display: block; margin-bottom: 6px; }
 
 /* ── INVOICE ── */
 .invoice-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--r2);padding:30px;color:#1a1612}
